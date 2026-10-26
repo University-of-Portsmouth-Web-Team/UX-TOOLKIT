@@ -36,8 +36,29 @@
   --on-secondary-dark: #FFFFFF; /* 4.8:1 */
   --on-secondary: #3C023C;      /* 5.9:1 */
 
-  /* Accent (Colour 4) — focus ring on dark backgrounds only */
-  --uop-accent-yellow: #FFC700;
+  /* PAGE COLOURS — defaults only. Every colour on this page can also be
+     changed on the day in Settings (cog icon) › Colours; those choices are
+     saved on the device and override the values here. To change the
+     defaults, edit them here AND in DEFAULT_COLOURS in the script below. */
+  --header-bg: #3C023C;
+  --header-text: #FFFFFF;
+  --tag-bg: #00A0FF;
+  --tag-text: #3C023C;
+  --page-bg: #FAFAFA;
+  --heading-colour: #3C023C;
+  --body-text: #505457;
+  --step-bg: #00A0FF;
+  --step-text: #3C023C;
+  --button-bg: #3C023C;
+  --button-text: #FFFFFF;
+  --button-shadow: #0078B4;
+  --wheel-rim: #3C023C;
+  --wheel-hub: #00A0FF;
+  --pointer: #3C023C;
+  --divider: #FFFFFF;
+  --overlay: #3C023C;
+  --focus-light: #3C023C;  /* focus ring on light areas */
+  --focus-dark: #FFC700;   /* focus ring on the header (UoP Colour 4) */
 
   /* Neutrals (design.md §3.2) */
   --uop-black: #000000;
@@ -70,7 +91,7 @@
   --font-body: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Focus ring colour on light surfaces (overridden on dark ones) */
-  --focus: var(--primary-dark);
+  --focus: var(--focus-light);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -81,13 +102,13 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--uop-off-white);
-  color: var(--uop-black);
+  background: var(--page-bg);
+  color: var(--body-text);
   font-family: var(--font-body);
   font-size: clamp(1rem, 0.85rem + 0.45vw, 1.3rem);
   line-height: 1.5;
 }
-h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; color: var(--primary-dark); }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; color: var(--heading-colour); }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .sr-only {
   position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -106,9 +127,9 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
   cursor: pointer;
   transition: background-color .15s, color .15s, box-shadow .15s, transform .1s;
 }
-.btn-primary { background: var(--primary-dark); color: #fff; }
-.btn-primary:hover { background: var(--primary); }
-.btn-secondary { background: #fff; color: var(--primary-dark); border-color: var(--primary-dark); }
+.btn-primary { background: var(--button-bg); color: var(--button-text); }
+.btn-primary:hover { box-shadow: 0 0 0 4px rgba(0,0,0,.12); }
+.btn-secondary { background: #fff; color: #3C023C; border-color: #3C023C; }
 .btn-secondary:hover { background: var(--uop-lighter-grey); }
 .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.75); font-size: 0.9em; }
 .btn-ghost:hover { background: rgba(255,255,255,.14); border-color: #fff; }
@@ -121,12 +142,12 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.6rem);
   font-weight: 800;
-  background: var(--primary-dark); color: #fff;
-  box-shadow: 0 6px 0 var(--secondary-dark);
+  background: var(--button-bg); color: var(--button-text);
+  box-shadow: 0 6px 0 var(--button-shadow);
 }
 .btn-spin { white-space: nowrap; }
-.btn-spin:hover { background: var(--primary); }
-.btn-spin:active:not([aria-disabled="true"]):not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--secondary-dark); }
+.btn-spin:hover { box-shadow: 0 6px 0 var(--button-shadow), 0 0 0 6px rgba(0,0,0,.1); }
+.btn-spin:active:not([aria-disabled="true"]):not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--button-shadow); }
 .btn-spin:disabled { background: var(--uop-dark-grey); box-shadow: none; opacity: .45; cursor: not-allowed; }
 .btn-spin svg.icon { width: 1em; height: 1em; stroke-width: 2.75; }
 .btn-spin.is-spinning svg.icon { animation: rotate 1s linear infinite; }
@@ -134,8 +155,8 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
 
 /* ---------- Header ---------- */
 .site-header {
-  --focus: var(--uop-accent-yellow);
-  background: var(--primary-dark); color: #fff;
+  --focus: var(--focus-dark);
+  background: var(--header-bg); color: var(--header-text);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
   gap: var(--uop-space-m) var(--uop-space-xl);
   padding: var(--uop-space-l) clamp(1rem, 3vw, 3rem);
@@ -143,7 +164,7 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
 .brand { display: flex; align-items: center; flex-wrap: wrap; gap: var(--uop-space-s) var(--uop-space-l); }
 .uni { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(1.25rem, 0.95rem + 1vw, 1.9rem); letter-spacing: -0.01em; }
 .tag {
-  background: var(--secondary); color: var(--primary-dark);
+  background: var(--tag-bg); color: var(--tag-text);
   font-weight: 700; font-size: 0.85em;
   border-radius: var(--uop-radius-pill); padding: 0.2rem 0.85rem;
 }
@@ -161,7 +182,7 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
 }
 .intro { grid-area: intro; }
 .intro h1 { margin: 0 0 var(--uop-space-m); font-size: clamp(2rem, 1.2rem + 2.6vw, 3.6rem); font-weight: 800; letter-spacing: -0.02em; }
-.lede { margin: 0; color: var(--uop-dark-grey); font-size: 1.15em; max-width: 34ch; }
+.lede { margin: 0; color: var(--body-text); font-size: 1.15em; max-width: 34ch; }
 .spin-area { grid-area: spin; padding-block: var(--uop-space-l) var(--uop-space-s); }
 .steps { grid-area: steps; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--uop-space-m); counter-reset: step; }
 .steps li { counter-increment: step; display: grid; grid-template-columns: auto 1fr; gap: 0 var(--uop-space-m); align-items: start; }
@@ -170,10 +191,11 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
   grid-row: span 2;
   width: 2.2em; height: 2.2em; border-radius: 50%;
   display: grid; place-items: center;
-  background: var(--secondary); color: var(--primary-dark); font-weight: 800;
+  background: var(--step-bg); color: var(--step-text); font-weight: 800;
 }
-.steps strong { color: var(--primary-dark); }
-.steps span { color: var(--uop-dark-grey); font-size: 0.9em; }
+.steps strong { color: var(--heading-colour); }
+.steps span { color: var(--body-text); font-size: 0.9em; }
+.steps li > :only-child { grid-row: span 2; align-self: center; }
 
 .stage { grid-area: stage; position: relative; min-height: 300px; }
 .wheel-wrap {
@@ -186,10 +208,10 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
 .empty-state {
   position: absolute; inset: 0; margin: auto; height: fit-content; max-width: 32rem;
   text-align: center; padding: var(--uop-space-2xl);
-  border: 3px dashed var(--uop-mid-grey); border-radius: var(--uop-radius-xl); background: #fff;
+  border: 3px dashed var(--uop-mid-grey); border-radius: var(--uop-radius-xl); background: var(--page-bg);
 }
 .empty-state p { margin: 0 0 var(--uop-space-l); }
-.empty-title { font-family: var(--font-display); font-weight: 800; font-size: 1.5em; color: var(--primary-dark); }
+.empty-title { font-family: var(--font-display); font-weight: 800; font-size: 1.5em; color: var(--heading-colour); }
 
 /* Short landscape screens (most laptops): tighten the side column */
 @media (orientation: landscape) and (min-width: 821px) and (max-height: 860px) {
@@ -217,27 +239,27 @@ svg.icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: curren
 
 /* ---------- Dialogs ---------- */
 dialog { border: none; padding: 0; color: inherit; }
-dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
+dialog::backdrop { background: rgba(60, 2, 60, 0.75); background: color-mix(in srgb, var(--overlay) 75%, transparent); }
 
 /* Result */
 #resultDialog { background: transparent; width: min(92vw, 920px); max-width: 92vw; overflow: visible; }
 .confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
 .result-card {
   position: relative; z-index: 1;
-  background: #fff; text-align: center;
+  background: var(--page-bg); text-align: center;
   border-radius: var(--uop-radius-xl);
   border-top: 16px solid var(--result-colour, var(--primary));
   padding: clamp(1.5rem, 4vw, 3.5rem);
   animation: pop .35s cubic-bezier(.2,.9,.3,1.25);
 }
 @keyframes pop { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
-.result-kicker { margin: 0; font-weight: 700; font-size: 1.25em; color: var(--uop-dark-grey); text-transform: uppercase; letter-spacing: .06em; }
+.result-kicker { margin: 0; font-weight: 700; font-size: 1.25em; color: var(--body-text); text-transform: uppercase; letter-spacing: .06em; }
 .result-topic {
   margin: var(--uop-space-m) 0 var(--uop-space-l);
   font-size: clamp(2.4rem, 1.4rem + 4.5vw, 5.5rem); font-weight: 800; letter-spacing: -0.02em;
   overflow-wrap: anywhere;
 }
-.result-help { margin: 0 auto var(--uop-space-2xl); max-width: 40ch; font-size: 1.15em; color: var(--uop-dark-grey); }
+.result-help { margin: 0 auto var(--uop-space-2xl); max-width: 40ch; font-size: 1.15em; color: var(--body-text); }
 .result-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--uop-space-l); }
 .result-actions .btn { font-size: 1.2em; min-height: 64px; padding-inline: 2em; }
 .result-actions .btn-spin { width: auto; min-height: 64px; font-size: 1.35em; }
@@ -246,9 +268,11 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
 .drawer {
   margin: 0 0 0 auto; height: 100%; max-height: 100%;
   width: min(580px, 100%); max-width: 100%;
-  background: #fff; font-size: 1rem;
+  background: #fff; color: #000; font-size: 1rem;
   animation: slide .25s ease-out;
+  --focus: #3C023C;   /* the settings panel keeps fixed, neutral colours so it always stays usable */
 }
+.drawer h2, .drawer h3 { color: #3C023C; }
 @keyframes slide { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
 .drawer-head {
   position: sticky; top: 0; z-index: 2;
@@ -260,14 +284,14 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
 .drawer-body { padding: var(--uop-space-xl); display: grid; gap: var(--uop-space-2xl); }
 .drawer-body h3 { margin: 0 0 var(--uop-space-m); font-size: 1.2rem; }
 .hint { margin: 0; color: var(--uop-dark-grey); }
-.add-form label { display: block; font-weight: 700; margin-bottom: var(--uop-space-s); color: var(--primary-dark); }
+.add-form label { display: block; font-weight: 700; margin-bottom: var(--uop-space-s); color: #3C023C; }
 .add-row { display: flex; gap: var(--uop-space-s); }
 .text-input {
   flex: 1; min-width: 0; font: inherit; min-height: 48px;
   padding: 0.5rem 0.75rem; color: var(--uop-black); background: #fff;
   border: 2px solid var(--uop-dark-grey); border-radius: var(--uop-radius-s);
 }
-.text-input:hover { border-color: var(--primary-dark); }
+.text-input:hover { border-color: #3C023C; }
 .error { margin: var(--uop-space-s) 0 0; color: #B00020; font-weight: 600; }
 
 .topic-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--uop-space-s); }
@@ -287,7 +311,7 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
   width: 44px; height: 44px; flex: none;
   display: grid; place-items: center;
   border: 2px solid transparent; border-radius: var(--uop-radius-s);
-  background: transparent; color: var(--primary-dark); cursor: pointer;
+  background: transparent; color: #3C023C; cursor: pointer;
 }
 .icon-btn:hover:not(:disabled) { background: var(--uop-lighter-grey); border-color: var(--uop-light-grey); }
 .icon-btn:disabled { color: var(--uop-light-grey); cursor: default; }
@@ -295,13 +319,64 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
 .list-meta { color: var(--uop-dark-grey); font-weight: 400; font-family: var(--font-body); font-size: 0.9em; }
 
 .options { border: 0; margin: 0; padding: 0; display: grid; gap: var(--uop-space-l); }
-.options legend { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--primary-dark); margin-bottom: var(--uop-space-m); padding: 0; }
+.options legend { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: #3C023C; margin-bottom: var(--uop-space-m); padding: 0; }
 .check { display: grid; grid-template-columns: auto 1fr; gap: var(--uop-space-m); align-items: start; }
-.check input { width: 28px; height: 28px; margin: 0.1rem 0 0; accent-color: var(--primary-dark); cursor: pointer; }
+.check input { width: 28px; height: 28px; margin: 0.1rem 0 0; accent-color: #3C023C; cursor: pointer; }
 .check label { font-weight: 600; cursor: pointer; }
 .check .sub { display: block; font-weight: 400; color: var(--uop-dark-grey); font-size: 0.92em; }
 .covered-list { margin: 0 0 var(--uop-space-l); padding-left: 1.25rem; color: var(--uop-dark-grey); }
 .reset-zone { border-top: 1px solid var(--uop-light-grey); padding-top: var(--uop-space-xl); }
+.btn-ghost.icon-only { width: 48px; height: 48px; padding: 0; }
+.btn-ghost.icon-only svg.icon { width: 26px; height: 26px; }
+.drawer h4 { margin: 0 0 var(--uop-space-m); font-family: var(--font-display); font-size: 1.05rem; color: #3C023C; }
+
+/* Collapsible settings sections */
+.panel { border: 1px solid var(--uop-light-grey); border-radius: var(--uop-radius-l); background: #fff; }
+.panel > summary {
+  display: flex; align-items: center; gap: var(--uop-space-m);
+  min-height: 56px; padding: var(--uop-space-s) var(--uop-space-l);
+  cursor: pointer; list-style: none; border-radius: var(--uop-radius-l);
+}
+.panel > summary::-webkit-details-marker { display: none; }
+.panel > summary::before {
+  content: ""; width: 10px; height: 10px; flex: none;
+  border-right: 3px solid #3C023C; border-bottom: 3px solid #3C023C;
+  transform: rotate(-45deg); transition: transform .15s;
+}
+.panel[open] > summary::before { transform: rotate(45deg); }
+.panel > summary:hover { background: var(--uop-lighter-grey); }
+.panel > summary h3 { margin: 0; font-size: 1.2rem; }
+.panel-body { padding: var(--uop-space-s) var(--uop-space-l) var(--uop-space-xl); display: grid; gap: var(--uop-space-xl); }
+.drawer-body { gap: var(--uop-space-l); }
+.field label { display: block; font-weight: 700; margin-bottom: var(--uop-space-s); color: #3C023C; }
+.field .text-input { width: 100%; }
+textarea.text-input { resize: vertical; line-height: 1.4; font: inherit; }
+.hint.small { font-size: 0.9em; margin-top: var(--uop-space-2xs); }
+
+/* Steps editor */
+.step-edit-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--uop-space-m); }
+.step-item { display: flex; gap: var(--uop-space-s); align-items: flex-start; padding: var(--uop-space-m); border: 1px solid var(--uop-light-grey); border-radius: var(--uop-radius-m); }
+.step-fields { flex: 1; min-width: 0; display: grid; gap: var(--uop-space-2xs); }
+.step-fields label { font-weight: 700; font-size: 0.92em; color: #3C023C; }
+.step-fields label + .text-input { margin-bottom: var(--uop-space-s); }
+.step-actions { display: grid; gap: 2px; }
+
+/* Colour editor */
+.colour-groups { display: grid; gap: var(--uop-space-xl); }
+.colour-group h4 { margin-bottom: var(--uop-space-s); }
+.colour-row { display: grid; grid-template-columns: 1fr auto 7.5rem; align-items: center; gap: var(--uop-space-s); padding: 0.25rem 0; }
+.colour-row label { font-weight: 600; }
+.colour-row input[type="color"] {
+  width: 56px; height: 44px; padding: 2px; cursor: pointer;
+  border: 2px solid var(--uop-dark-grey); border-radius: var(--uop-radius-s); background: #fff;
+}
+.colour-row .hex { min-height: 44px; font-family: ui-monospace, Menlo, Consolas, monospace; text-transform: uppercase; }
+.colour-row .hex[aria-invalid="true"] { border-color: #B00020; }
+.checks { list-style: none; margin: var(--uop-space-s) 0 0; padding: 0; display: grid; gap: var(--uop-space-2xs); font-size: 0.92em; }
+.checks li { display: flex; align-items: center; gap: var(--uop-space-s); padding: 0.35rem 0.6rem; border-radius: var(--uop-radius-s); background: var(--uop-lighter-grey); }
+.checks .sample { flex: none; min-width: 2.6rem; text-align: center; font-weight: 800; border-radius: 4px; padding: 0 0.3rem; border: 1px solid var(--uop-light-grey); }
+.checks .ok { color: #1B5E20; font-weight: 700; }
+.checks .bad { color: #B00020; font-weight: 700; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
@@ -314,38 +389,35 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
   <div class="brand">
     <!-- Text only; add the official logo here if wanted. -->
     <p class="uni">University of Portsmouth</p>
-    <span class="tag">Undergraduate Open Day</span>
+    <span class="tag" id="tagText">Undergraduate Open Day</span>
   </div>
   <div class="header-actions">
     <button type="button" class="btn btn-ghost" id="fullscreenBtn">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
       <span id="fullscreenLabel">Full screen</span>
     </button>
-    <button type="button" class="btn btn-ghost" id="editBtn" aria-haspopup="dialog">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg>
-      Edit topics
+    <button type="button" class="btn btn-ghost icon-only" id="editBtn" aria-haspopup="dialog" aria-label="Settings" title="Settings">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
   </div>
 </header>
 
 <main class="layout">
+  <!-- The text below is only the first-load default; the live wording comes
+       from Settings › Page text (defaults in DEFAULT_CONTENT in the script). -->
   <div class="intro">
-    <h1>Help us build a better website</h1>
-    <p class="lede">Spin the wheel to pick your topic – then tell us what you think. It’s quick, and there are no wrong answers.</p>
+    <h1 id="headingText">Help us build a better website</h1>
+    <p class="lede" id="ledeText">Spin the wheel to pick your topic – then tell us what you think. It’s quick, and there are no wrong answers.</p>
   </div>
 
   <div class="spin-area">
     <button type="button" class="btn btn-spin" id="spinBtn">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg>
-      Spin the wheel
+      <span id="spinLabel">Spin the wheel</span>
     </button>
   </div>
 
-  <ol class="steps">
-    <li><strong>Spin the wheel</strong><span>Press the big button to pick a topic.</span></li>
-    <li><strong>Have a quick chat</strong><span>We’ll ask a few questions about that part of our website.</span></li>
-    <li><strong>Tell us what you really think</strong><span>We’re testing the website, not you.</span></li>
-  </ol>
+  <ol class="steps" id="stepsList"></ol>
 
   <section class="stage" id="stage" aria-label="Topic wheel">
     <div class="wheel-wrap" id="wheelWrap">
@@ -357,11 +429,11 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
         </defs>
         <g id="rotor"></g>
         <!-- Static parts: rim, hub and pointer -->
-        <circle cx="500" cy="500" r="466" fill="none" style="stroke: var(--primary-dark)" stroke-width="16"/>
-        <circle cx="500" cy="500" r="74" fill="#fff" style="stroke: var(--primary-dark)" stroke-width="10"/>
-        <circle cx="500" cy="500" r="26" style="fill: var(--secondary)"/>
+        <circle cx="500" cy="500" r="466" fill="none" style="stroke: var(--wheel-rim)" stroke-width="16"/>
+        <circle cx="500" cy="500" r="74" style="fill: var(--divider); stroke: var(--wheel-rim)" stroke-width="10"/>
+        <circle cx="500" cy="500" r="26" style="fill: var(--wheel-hub)"/>
         <g filter="url(#pointerShadow)">
-          <path d="M458 14 H542 L500 112 Z" style="fill: var(--primary-dark)" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+          <path d="M458 14 H542 L500 112 Z" style="fill: var(--pointer); stroke: var(--divider)" stroke-width="7" stroke-linejoin="round"/>
         </g>
       </svg>
     </div>
@@ -396,14 +468,17 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
 <!-- Researcher settings -->
 <dialog id="settingsDialog" class="drawer" aria-labelledby="settingsTitle">
   <div class="drawer-head">
-    <h2 id="settingsTitle">Edit topics</h2>
-    <button type="button" class="icon-btn" id="settingsClose" aria-label="Close topic editor">
+    <h2 id="settingsTitle">Settings</h2>
+    <button type="button" class="icon-btn" id="settingsClose" aria-label="Close settings">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
   </div>
   <div class="drawer-body">
-    <p class="hint">For researchers. Changes are saved automatically on this device.</p>
+    <p class="hint">For researchers. Changes show straight away and are saved automatically on this device.</p>
 
+    <details class="panel" open>
+    <summary><h3>Topics</h3></summary>
+    <div class="panel-body">
     <form class="add-form" id="addForm" novalidate>
       <label for="newTopic">Add a topic</label>
       <div class="add-row">
@@ -417,14 +492,80 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
     </form>
 
     <section aria-labelledby="listHeading">
-      <h3 id="listHeading">Topics on the wheel <span class="list-meta" id="topicCount"></span></h3>
+      <h4 id="listHeading">Topics on the wheel <span class="list-meta" id="topicCount"></span></h4>
       <p class="hint" id="listHint">Drag the handle, or use the arrow buttons, to change the order.</p>
       <ol class="topic-list" id="topicList" aria-labelledby="listHeading"></ol>
       <p class="hint" id="listEmpty" hidden>No topics yet. Add one above.</p>
     </section>
 
+    <section id="coveredSection" aria-labelledby="coveredHeading" hidden>
+      <h4 id="coveredHeading">Already covered <span class="list-meta" id="coveredCount"></span></h4>
+      <ul class="covered-list" id="coveredList"></ul>
+      <button type="button" class="btn btn-secondary" id="restoreBtn">Put covered topics back on the wheel</button>
+    </section>
+
+    <div class="reset-zone">
+      <button type="button" class="btn btn-secondary" id="resetBtn">Reset to default topics</button>
+    </div>
+    </div>
+    </details>
+
+    <details class="panel">
+    <summary><h3>Page text</h3></summary>
+    <div class="panel-body">
+      <div class="field">
+        <label for="fTag">Tag next to the University name</label>
+        <input class="text-input" id="fTag" data-content="tag" type="text" maxlength="60" autocomplete="off">
+        <p class="hint small">Leave empty to hide the tag.</p>
+      </div>
+      <div class="field">
+        <label for="fHeading">Main heading</label>
+        <input class="text-input" id="fHeading" data-content="heading" type="text" maxlength="90" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="fLede">Subheading</label>
+        <textarea class="text-input" id="fLede" data-content="lede" rows="3" maxlength="240"></textarea>
+        <p class="hint small">Leave empty to hide it.</p>
+      </div>
+      <div class="field">
+        <label for="fSpin">Spin button text</label>
+        <input class="text-input" id="fSpin" data-content="spinLabel" type="text" maxlength="30" autocomplete="off">
+        <p class="hint small">If left empty, the button says “Spin the wheel”.</p>
+      </div>
+      <div class="reset-zone">
+        <button type="button" class="btn btn-secondary" id="resetTextBtn">Reset page text and steps</button>
+      </div>
+    </div>
+    </details>
+
+    <details class="panel">
+    <summary><h3>Steps under the button <span class="list-meta" id="stepCount"></span></h3></summary>
+    <div class="panel-body">
+      <p class="hint">Optional. Add as many steps as you like, or remove them all to hide the list.</p>
+      <ol class="step-edit-list" id="stepEditList"></ol>
+      <button type="button" class="btn btn-secondary" id="addStepBtn">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Add a step
+      </button>
+    </div>
+    </details>
+
+    <details class="panel">
+    <summary><h3>Colours</h3></summary>
+    <div class="panel-body">
+      <p class="hint">Pick a colour or type a hex code (for example #3C023C). Text colours are checked against WCAG AA as you go.</p>
+      <div id="colourGroups" class="colour-groups"></div>
+      <div class="reset-zone">
+        <button type="button" class="btn btn-secondary" id="resetColoursBtn">Reset colours to default</button>
+      </div>
+    </div>
+    </details>
+
+    <details class="panel">
+    <summary><h3>Options</h3></summary>
+    <div class="panel-body">
     <fieldset class="options">
-      <legend>Options</legend>
+      <legend class="sr-only">Options</legend>
       <div class="check">
         <input type="checkbox" id="removeAfterPick">
         <label for="removeAfterPick">Remove a topic after it’s picked
@@ -436,16 +577,8 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
           <span class="sub">Always off when the device is set to reduce motion.</span></label>
       </div>
     </fieldset>
-
-    <section id="coveredSection" aria-labelledby="coveredHeading" hidden>
-      <h3 id="coveredHeading">Already covered <span class="list-meta" id="coveredCount"></span></h3>
-      <ul class="covered-list" id="coveredList"></ul>
-      <button type="button" class="btn btn-secondary" id="restoreBtn">Put covered topics back on the wheel</button>
-    </section>
-
-    <div class="reset-zone">
-      <button type="button" class="btn btn-secondary" id="resetBtn">Reset to default topics</button>
     </div>
+    </details>
   </div>
   <p id="settingsLive" class="sr-only" aria-live="polite"></p>
 </dialog>
@@ -464,13 +597,29 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
   </li>
 </template>
 
+<template id="stepTpl">
+  <li class="step-item">
+    <div class="step-fields">
+      <label class="step-title-label"></label>
+      <input class="text-input" data-field="title" type="text" maxlength="60" autocomplete="off">
+      <label class="step-text-label"></label>
+      <input class="text-input" data-field="text" type="text" maxlength="140" autocomplete="off">
+    </div>
+    <div class="step-actions">
+      <button type="button" class="icon-btn" data-act="up"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+      <button type="button" class="icon-btn" data-act="down"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <button type="button" class="icon-btn danger" data-act="remove"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+    </div>
+  </li>
+</template>
+
 <script>
 (() => {
   'use strict';
 
   /* ===================================================================
      DEFAULT TOPICS — edit this list to change the starting topics.
-     Researchers can also change them on the day via "Edit topics";
+     Researchers can also change them on the day in Settings (cog icon) › Topics;
      "Reset to default topics" always returns to this list.
      =================================================================== */
   const DEFAULT_TOPICS = [
@@ -486,8 +635,77 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
     'Using our site on a phone'
   ];
 
-  /* SEGMENT COLOURS — the order segments cycle through. Values live in
-     the CSS custom properties at the top of the file. */
+  /* ===================================================================
+     DEFAULT PAGE TEXT — change the starting wording here. Researchers can
+     edit it on the day in Settings › Page text and Settings › Steps.
+     Steps are optional: use an empty list [] for none.
+     =================================================================== */
+  const DEFAULT_CONTENT = {
+    tag: 'Undergraduate Open Day',
+    heading: 'Help us build a better website',
+    lede: 'Spin the wheel to pick your topic – then tell us what you think. It’s quick, and there are no wrong answers.',
+    spinLabel: 'Spin the wheel',
+    steps: [
+      { title: 'Spin the wheel', text: 'Press the big button to pick a topic.' },
+      { title: 'Have a quick chat', text: 'We’ll ask a few questions about that part of our website.' },
+      { title: 'Tell us what you really think', text: 'We’re testing the website, not you.' }
+    ]
+  };
+
+  /* ===================================================================
+     DEFAULT COLOURS — keep these in step with the CSS custom properties
+     at the top of the file. Every one is editable in Settings › Colours.
+     `checks` are the text/background pairs tested for contrast
+     (min 4.5:1 for text, 3:1 for focus rings and the pointer).
+     =================================================================== */
+  const COLOUR_GROUPS = [
+    { title: 'Wheel segments', vars: [
+        ['--primary-dark', 'Segment colour 1', '#3C023C'], ['--on-primary-dark', 'Text on segment 1', '#FFFFFF'],
+        ['--secondary-dark', 'Segment colour 2', '#0078B4'], ['--on-secondary-dark', 'Text on segment 2', '#FFFFFF'],
+        ['--primary', 'Segment colour 3', '#621360'], ['--on-primary', 'Text on segment 3', '#FFFFFF'],
+        ['--secondary', 'Segment colour 4', '#00A0FF'], ['--on-secondary', 'Text on segment 4', '#3C023C']
+      ],
+      checks: [
+        ['--primary-dark', '--on-primary-dark', 'Segment 1 text', 4.5],
+        ['--secondary-dark', '--on-secondary-dark', 'Segment 2 text', 4.5],
+        ['--primary', '--on-primary', 'Segment 3 text', 4.5],
+        ['--secondary', '--on-secondary', 'Segment 4 text', 4.5]
+      ] },
+    { title: 'Wheel details', vars: [
+        ['--wheel-rim', 'Rim and hub ring', '#3C023C'], ['--wheel-hub', 'Hub centre', '#00A0FF'],
+        ['--pointer', 'Pointer', '#3C023C'], ['--divider', 'Dividers and hub', '#FFFFFF']
+      ],
+      checks: [['--page-bg', '--pointer', 'Pointer against page', 3]] },
+    { title: 'Header', vars: [
+        ['--header-bg', 'Header background', '#3C023C'], ['--header-text', 'Header text', '#FFFFFF'],
+        ['--tag-bg', 'Tag background', '#00A0FF'], ['--tag-text', 'Tag text', '#3C023C']
+      ],
+      checks: [['--header-bg', '--header-text', 'Header text', 4.5], ['--tag-bg', '--tag-text', 'Tag text', 4.5]] },
+    { title: 'Page', vars: [
+        ['--page-bg', 'Page background', '#FAFAFA'], ['--heading-colour', 'Headings', '#3C023C'],
+        ['--body-text', 'Body text', '#505457'], ['--step-bg', 'Step number circles', '#00A0FF'],
+        ['--step-text', 'Step numbers', '#3C023C']
+      ],
+      checks: [
+        ['--page-bg', '--heading-colour', 'Headings', 4.5], ['--page-bg', '--body-text', 'Body text', 4.5],
+        ['--step-bg', '--step-text', 'Step numbers', 4.5]
+      ] },
+    { title: 'Buttons', vars: [
+        ['--button-bg', 'Button background', '#3C023C'], ['--button-text', 'Button text', '#FFFFFF'],
+        ['--button-shadow', 'Button shadow', '#0078B4']
+      ],
+      checks: [['--button-bg', '--button-text', 'Button text', 4.5]] },
+    { title: 'Focus and overlay', vars: [
+        ['--focus-light', 'Focus ring on the page', '#3C023C'], ['--focus-dark', 'Focus ring on the header', '#FFC700'],
+        ['--overlay', 'Overlay behind pop-ups', '#3C023C']
+      ],
+      checks: [['--page-bg', '--focus-light', 'Focus ring on the page', 3], ['--header-bg', '--focus-dark', 'Focus ring on the header', 3]] }
+  ];
+  const DEFAULT_COLOURS = {};
+  COLOUR_GROUPS.forEach((g) => g.vars.forEach(([v, , hex]) => { DEFAULT_COLOURS[v] = hex; }));
+  const isHex = (v) => typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v);
+
+  /* SEGMENT COLOURS — the order segments cycle through. */
   const SEGMENT_COLOURS = [
     { fill: 'var(--primary-dark)',   text: 'var(--on-primary-dark)' },
     { fill: 'var(--secondary-dark)', text: 'var(--on-secondary-dark)' },
@@ -510,8 +728,37 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
     ? arr.filter((s) => typeof s === 'string' && s.trim()).map((s) => s.trim().slice(0, 80))
     : null;
 
+  let sid = 0;
+  const mkStep = (s) => ({ id: 's' + (++sid), title: String(s.title || '').slice(0, 60), text: String(s.text || '').slice(0, 140) });
+  const str = (v, fallback, max) => (typeof v === 'string' ? v.slice(0, max) : fallback);
+  function defaultContent() {
+    return {
+      tag: DEFAULT_CONTENT.tag, heading: DEFAULT_CONTENT.heading,
+      lede: DEFAULT_CONTENT.lede, spinLabel: DEFAULT_CONTENT.spinLabel,
+      steps: DEFAULT_CONTENT.steps.map(mkStep)
+    };
+  }
+  function loadContent(c) {
+    if (!c || typeof c !== 'object') return defaultContent();
+    const d = defaultContent();
+    return {
+      tag: str(c.tag, d.tag, 60), heading: str(c.heading, d.heading, 90),
+      lede: str(c.lede, d.lede, 240), spinLabel: str(c.spinLabel, d.spinLabel, 30),
+      steps: Array.isArray(c.steps)
+        ? c.steps.filter((s) => s && typeof s === 'object').map(mkStep)
+        : d.steps
+    };
+  }
+  function loadColours(c) {
+    const out = Object.assign({}, DEFAULT_COLOURS);
+    if (c && typeof c === 'object') for (const k in out) if (isHex(c[k])) out[k] = c[k].toUpperCase();
+    return out;
+  }
   function defaults() {
-    return { topics: DEFAULT_TOPICS.map(mk), covered: [], removeAfterPick: false, celebrate: true };
+    return {
+      topics: DEFAULT_TOPICS.map(mk), covered: [], removeAfterPick: false, celebrate: true,
+      content: defaultContent(), colours: loadColours(null)
+    };
   }
   function load() {
     try {
@@ -524,7 +771,9 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
         topics: topics.map(mk),
         covered: cleanList(d.covered) || [],
         removeAfterPick: !!d.removeAfterPick,
-        celebrate: d.celebrate !== false
+        celebrate: d.celebrate !== false,
+        content: loadContent(d.content),
+        colours: loadColours(d.colours)
       };
     } catch (e) {
       return defaults();
@@ -536,7 +785,11 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
         topics: state.topics.map((t) => t.label),
         covered: state.covered,
         removeAfterPick: state.removeAfterPick,
-        celebrate: state.celebrate
+        celebrate: state.celebrate,
+        content: Object.assign({}, state.content, {
+          steps: state.content.steps.map((s) => ({ title: s.title, text: s.text }))
+        }),
+        colours: state.colours
       }));
     } catch (e) { /* storage unavailable (private mode etc.) — keep working in memory */ }
   }
@@ -638,7 +891,7 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
       const allCovered = state.covered.length > 0;
       $('emptyTitle').textContent = allCovered ? 'All topics covered!' : 'No topics on the wheel yet';
       $('emptyMsg').textContent = allCovered
-        ? 'Open “Edit topics” to put covered topics back or add new ones.'
+        ? 'Open Settings (the cog icon) to put covered topics back or add new ones.'
         : 'Add some topics to start spinning.';
       return;
     }
@@ -669,7 +922,7 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
         g.appendChild(el('path', {
           d: 'M' + C + ' ' + C + ' L' + x0.toFixed(2) + ' ' + y0.toFixed(2) +
              ' A' + R + ' ' + R + ' 0 ' + (seg > 180 ? 1 : 0) + ' 1 ' + x1.toFixed(2) + ' ' + y1.toFixed(2) + ' Z',
-          style: 'fill:' + col.fill, stroke: '#fff', 'stroke-width': 4, 'stroke-linejoin': 'round'
+          style: 'fill:' + col.fill + ';stroke:var(--divider)', 'stroke-width': 4, 'stroke-linejoin': 'round'
         }));
         const fit = fitLabel(topic.label, seg);
         const t = el('text', {
@@ -840,7 +1093,7 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
     confettiCanvas.width = W * dpr; confettiCanvas.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const css = getComputedStyle(document.documentElement);
-    const cols = ['--secondary', '--uop-accent-yellow', '--secondary-dark', '--primary', '--uop-white']
+    const cols = ['--secondary', '--focus-dark', '--secondary-dark', '--primary', '--divider']
       .map((v) => css.getPropertyValue(v).trim() || '#00A0FF');
     const N = Math.round(Math.min(170, W / 7));
     const parts = Array.from({ length: N }, (_, i) => ({
@@ -872,8 +1125,12 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
   function openSettings() {
     if (spinning) return;
     renderSettings();
+    renderTextFields();
+    renderSteps();
+    renderColourFields();
     try { settingsDialog.showModal(); } catch (e) { settingsDialog.setAttribute('open', ''); }
-    $('newTopic').focus();
+    const first = $('newTopic');
+    (first.offsetParent ? first : $('settingsClose')).focus();
   }
   editBtn.addEventListener('click', () => { if (editBtn.getAttribute('aria-disabled') !== 'true') openSettings(); });
   $('emptyEditBtn').addEventListener('click', openSettings);
@@ -1056,22 +1313,254 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
     announce(settingsLive, count + ' topics put back on the wheel.');
   });
 
-  // Reset needs a second press to confirm (no browser pop-ups)
-  const resetBtn = $('resetBtn');
-  let resetArmed = null;
-  resetBtn.addEventListener('click', () => {
-    if (!resetArmed) {
-      resetBtn.textContent = 'Press again to confirm reset';
-      resetArmed = setTimeout(() => { resetArmed = null; resetBtn.textContent = 'Reset to default topics'; }, 4000);
-      return;
-    }
-    clearTimeout(resetArmed); resetArmed = null;
-    resetBtn.textContent = 'Reset to default topics';
+  // Reset buttons need a second press to confirm (no browser pop-ups)
+  function confirmButton(btn, onConfirm) {
+    const label = btn.textContent.trim();
+    let armed = null;
+    btn.addEventListener('click', () => {
+      if (!armed) {
+        btn.textContent = 'Press again to confirm';
+        armed = setTimeout(() => { armed = null; btn.textContent = label; }, 4000);
+        return;
+      }
+      clearTimeout(armed); armed = null;
+      btn.textContent = label;
+      onConfirm();
+      btn.focus();
+    });
+  }
+  confirmButton($('resetBtn'), () => {
     state.topics = DEFAULT_TOPICS.map(mk);
     state.covered = [];
     commit();
-    resetBtn.focus();
     announce(settingsLive, 'Topics reset to the ' + DEFAULT_TOPICS.length + ' defaults.');
+  });
+
+  /* ---------- Page text ---------- */
+  function showText(node, value) {
+    const v = (value || '').trim();
+    node.textContent = v;
+    node.hidden = !v;
+  }
+  function applyContent() {
+    const c = state.content;
+    showText($('tagText'), c.tag);
+    showText($('headingText'), c.heading);
+    showText($('ledeText'), c.lede);
+    $('spinLabel').textContent = c.spinLabel.trim() || DEFAULT_CONTENT.spinLabel;
+
+    const ol = $('stepsList');
+    ol.textContent = '';
+    c.steps.forEach((s) => {
+      const title = s.title.trim(), text = s.text.trim();
+      if (!title && !text) return;
+      const li = document.createElement('li');
+      if (title) { const b = document.createElement('strong'); b.textContent = title; li.appendChild(b); }
+      if (text) { const sp = document.createElement('span'); sp.textContent = text; li.appendChild(sp); }
+      ol.appendChild(li);
+    });
+    ol.hidden = !ol.children.length;
+    sizeWheel();
+  }
+
+  const textFields = document.querySelectorAll('[data-content]');
+  function renderTextFields() {
+    textFields.forEach((f) => { f.value = state.content[f.dataset.content]; });
+  }
+  textFields.forEach((f) => f.addEventListener('input', () => {
+    state.content[f.dataset.content] = f.value;
+    applyContent();
+    save();
+  }));
+  confirmButton($('resetTextBtn'), () => {
+    state.content = defaultContent();
+    applyContent(); renderTextFields(); renderSteps(); save();
+    announce(settingsLive, 'Page text and steps reset to the defaults.');
+  });
+
+  /* ---------- Steps editor ---------- */
+  const stepList = $('stepEditList'), stepTpl = $('stepTpl');
+  function stepLabels(li, s, pos) {
+    const name = s.title.trim() || s.text.trim() || ('step ' + pos);
+    li.querySelector('.step-title-label').textContent = 'Step ' + pos + ' heading';
+    li.querySelector('.step-text-label').textContent = 'Step ' + pos + ' description (optional)';
+    li.querySelector('[data-act="up"]').setAttribute('aria-label', 'Move “' + name + '” up');
+    li.querySelector('[data-act="down"]').setAttribute('aria-label', 'Move “' + name + '” down');
+    li.querySelector('[data-act="remove"]').setAttribute('aria-label', 'Remove “' + name + '”');
+  }
+  function renderSteps(focus) {
+    const steps = state.content.steps;
+    stepList.textContent = '';
+    steps.forEach((s, i) => {
+      const li = stepTpl.content.firstElementChild.cloneNode(true);
+      li.dataset.id = s.id;
+      ['title', 'text'].forEach((field) => {
+        const input = li.querySelector('[data-field="' + field + '"]');
+        input.id = 'st-' + field + '-' + s.id;
+        input.value = s[field];
+        li.querySelector(field === 'title' ? '.step-title-label' : '.step-text-label').htmlFor = input.id;
+      });
+      li.querySelector('[data-act="up"]').disabled = i === 0;
+      li.querySelector('[data-act="down"]').disabled = i === steps.length - 1;
+      stepLabels(li, s, i + 1);
+      stepList.appendChild(li);
+    });
+    stepList.hidden = !steps.length;
+    $('stepCount').textContent = '(' + steps.length + ')';
+    if (focus) {
+      const li = stepList.querySelector('[data-id="' + focus.id + '"]');
+      let target = li && li.querySelector(focus.sel);
+      if (target && target.disabled) target = li.querySelector('[data-act="' + (focus.sel.includes('up') ? 'down' : 'up') + '"]');
+      if (!target || target.disabled) target = li ? li.querySelector('input') : $('addStepBtn');
+      target.focus();
+    }
+  }
+  function stepsChanged(focus) { applyContent(); save(); renderSteps(focus); }
+
+  $('addStepBtn').addEventListener('click', () => {
+    const s = mkStep({ title: '', text: '' });
+    state.content.steps.push(s);
+    stepsChanged({ id: s.id, sel: '[data-field="title"]' });
+    announce(settingsLive, 'Step ' + state.content.steps.length + ' added.');
+  });
+  stepList.addEventListener('input', (e) => {
+    const field = e.target.dataset.field;
+    if (!field) return;
+    const li = e.target.closest('li');
+    const steps = state.content.steps;
+    const s = steps.find((x) => x.id === li.dataset.id);
+    if (!s) return;
+    s[field] = e.target.value;
+    stepLabels(li, s, steps.indexOf(s) + 1);
+    applyContent(); save();
+  });
+  stepList.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn || btn.disabled) return;
+    const steps = state.content.steps;
+    const id = btn.closest('li').dataset.id;
+    const i = steps.findIndex((s) => s.id === id);
+    if (i < 0) return;
+    const act = btn.dataset.act;
+    if (act === 'up' || act === 'down') {
+      const to = act === 'up' ? i - 1 : i + 1;
+      const [s] = steps.splice(i, 1);
+      steps.splice(to, 0, s);
+      stepsChanged({ id, sel: '[data-act="' + act + '"]' });
+      announce(settingsLive, 'Step moved to position ' + (to + 1) + '.');
+    } else if (act === 'remove') {
+      steps.splice(i, 1);
+      const next = steps[i] || steps[i - 1];
+      stepsChanged(next ? { id: next.id, sel: '[data-act="remove"]' } : null);
+      if (!next) $('addStepBtn').focus();
+      announce(settingsLive, 'Step removed. ' + (steps.length ? steps.length + ' left.' : 'The steps list is now hidden.'));
+    }
+  });
+
+  /* ---------- Colours ---------- */
+  function applyColours() {
+    const rs = document.documentElement.style;
+    for (const k in state.colours) rs.setProperty(k, state.colours[k]);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', state.colours['--header-bg']);
+  }
+  function luminance(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  }
+  function contrast(a, b) {
+    const A = luminance(a), B = luminance(b);
+    return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05);
+  }
+
+  const colourGroups = $('colourGroups');
+  const checkEls = [];
+  COLOUR_GROUPS.forEach((g, gi) => {
+    const sec = document.createElement('section');
+    sec.className = 'colour-group';
+    sec.setAttribute('aria-labelledby', 'cg-' + gi);
+    const h = document.createElement('h4');
+    h.id = 'cg-' + gi; h.textContent = g.title;
+    sec.appendChild(h);
+    g.vars.forEach(([v, label]) => {
+      const key = v.slice(2);
+      const row = document.createElement('div');
+      row.className = 'colour-row';
+      row.innerHTML =
+        '<label for="cp-' + key + '"></label>' +
+        '<input type="color" id="cp-' + key + '">' +
+        '<input type="text" class="text-input hex" id="hx-' + key + '" maxlength="7" spellcheck="false" autocomplete="off">';
+      row.querySelector('label').textContent = label;
+      const picker = row.querySelector('[type="color"]'), hex = row.querySelector('.hex');
+      hex.setAttribute('aria-label', label + ' hex code');
+      picker.dataset.var = hex.dataset.var = v;
+      picker.addEventListener('input', () => setColour(v, picker.value, picker));
+      hex.addEventListener('input', () => {
+        let val = hex.value.trim();
+        if (val && val[0] !== '#') val = '#' + val;
+        const ok = isHex(val);
+        hex.setAttribute('aria-invalid', ok ? 'false' : 'true');
+        if (ok) setColour(v, val, hex);
+      });
+      hex.addEventListener('change', () => { hex.value = state.colours[v]; hex.setAttribute('aria-invalid', 'false'); });
+      sec.appendChild(row);
+    });
+    if (g.checks && g.checks.length) {
+      const ul = document.createElement('ul');
+      ul.className = 'checks';
+      ul.setAttribute('aria-label', g.title + ' contrast checks');
+      g.checks.forEach((chk) => {
+        const li = document.createElement('li');
+        ul.appendChild(li);
+        checkEls.push({ li, chk });
+      });
+      sec.appendChild(ul);
+    }
+    colourGroups.appendChild(sec);
+  });
+
+  function renderChecks() {
+    checkEls.forEach(({ li, chk }) => {
+      const [bg, fg, label, min] = chk;
+      const r = contrast(state.colours[bg], state.colours[fg]);
+      const pass = r >= min;
+      li.innerHTML = '<span class="sample" aria-hidden="true">Aa</span><span class="desc"></span><span></span>';
+      const sample = li.querySelector('.sample');
+      sample.style.background = state.colours[bg];
+      sample.style.color = state.colours[fg];
+      li.querySelector('.desc').textContent = label + ': ' + (Math.floor(r * 10) / 10) + ':1';
+      const verdict = li.lastElementChild;
+      verdict.className = pass ? 'ok' : 'bad';
+      verdict.textContent = pass ? '✓ Passes' : '✕ Below ' + min + ':1';
+    });
+  }
+  function renderColourFields() {
+    colourGroups.querySelectorAll('[data-var]').forEach((inp) => {
+      const val = state.colours[inp.dataset.var];
+      inp.value = inp.type === 'color' ? val.toLowerCase() : val;
+      if (inp.classList.contains('hex')) inp.setAttribute('aria-invalid', 'false');
+    });
+    renderChecks();
+  }
+  function setColour(v, val, source) {
+    val = val.toUpperCase();
+    state.colours[v] = val;
+    colourGroups.querySelectorAll('[data-var="' + v + '"]').forEach((inp) => {
+      if (inp === source) return;
+      inp.value = inp.type === 'color' ? val.toLowerCase() : val;
+    });
+    applyColours();
+    renderChecks();
+    save();
+  }
+  confirmButton($('resetColoursBtn'), () => {
+    state.colours = loadColours(null);
+    applyColours(); renderColourFields(); save();
+    announce(settingsLive, 'Colours reset to the defaults.');
   });
 
   /* ---------- Full screen (kiosk mode) ---------- */
@@ -1095,7 +1584,8 @@ dialog::backdrop { background: rgba(60, 2, 60, 0.75); }
   document.addEventListener('webkitfullscreenchange', updateFs);
 
   /* ---------- Go ---------- */
-  sizeWheel();
+  applyColours();
+  applyContent();
   renderWheel();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderWheel);  // re-fit labels once the font loads
 })();
