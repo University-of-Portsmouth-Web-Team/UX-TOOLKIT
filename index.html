@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UX Toolkit – University of Portsmouth</title>
+<meta name="description" content="The UX team's directory of research prototypes, design variants and session tools.">
+<meta name="theme-color" content="#1E1B4B">
+<!--
+  Typeface: Encode Sans (design.md §4.1, proposed body face, installed in Figma).
+  One variable family is used in two widths: expanded (font-stretch 125%) for
+  headings, echoing the Encode Sans Expanded headings of the current site, and
+  normal width for body text. If the venue is offline the page falls back to
+  the system sans-serif and keeps working.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   TOKENS — taken from design.md v0.2.0
+   Colour: semantic roles (§3.3) with the two §3.5 fixes applied:
+     · link uses Electric Blue/600 (4.96:1) instead of /500 (2.61:1)
+     · meaningful borders use Border strong (Navy/300, 3.72:1)
+   Spacing and radius: §5 and §6.
+   ===================================================================== */
+:root {
+  color-scheme: light;
+
+  /* Core palette (§3.1, §3.2) */
+  --uop-navy-500: #1E1B4B;
+  --uop-navy-400: #565478;
+  --uop-navy-300: #83829C;
+  --uop-navy-200: #B0AFC0;
+  --uop-navy-100: #DDDDE4;
+  --uop-pink-500: #FF0F7B;
+  --uop-pink-600: #D90D69;
+  --uop-pink-700: #B90B5A;
+  --uop-pink-pale-500: #FFC6E7;
+  --uop-pink-pale-200: #FFEBF7;
+  --uop-blue-600: #0076B2;
+  --uop-blue-700: #00537C;
+  --uop-purple-500: #6A00F4;
+  --uop-yellow-500: #FFC700;
+  --uop-teal-500: #00C2A8;
+  --uop-blue-500: #00A8FF;
+  --uop-aqua-500: #7FFFD4;
+  --uop-coral-500: #FF7A59;
+
+  /* Semantic roles (§3.3) */
+  --uop-color-text-primary: var(--uop-navy-500);
+  --uop-color-text-secondary: var(--uop-navy-400);
+  --uop-color-text-inverse: #FFFFFF;
+  --uop-color-link: var(--uop-blue-600);
+  --uop-color-link-hover: var(--uop-blue-700);
+  --uop-color-link-visited: var(--uop-purple-500);
+  --uop-color-surface: #FFFFFF;
+  --uop-color-surface-alt: var(--uop-navy-100);
+  --uop-color-surface-brand: var(--uop-pink-pale-500);
+  --uop-color-border: var(--uop-navy-200);
+  --uop-color-border-strong: var(--uop-navy-300);
+  --uop-color-focus: var(--uop-pink-500);
+  --uop-color-cta: var(--uop-pink-600);
+  --uop-color-cta-pressed: var(--uop-pink-700);
+
+  /* Spacing (§5) */
+  --uop-space-2xs: 0.25rem;
+  --uop-space-xs: 0.375rem;
+  --uop-space-s: 0.5rem;
+  --uop-space-m: 0.75rem;
+  --uop-space-l: 1rem;
+  --uop-space-xl: 1.5rem;
+  --uop-space-2xl: 2rem;
+  --uop-space-3xl: 2.5rem;
+  --uop-space-4xl: 3rem;
+  --uop-space-5xl: 4rem;
+  --uop-space-6xl: 5rem;
+
+  /* Radius (§6) */
+  --uop-radius-xs: 0.25rem;
+  --uop-radius-s: 0.375rem;
+  --uop-radius-m: 0.5rem;
+  --uop-radius-l: 0.75rem;
+  --uop-radius-xl: 1rem;
+  --uop-radius-pill: 999px;
+
+  /* Type. Sizes are stand-ins: the target ramp in §4.2 is still undecided. */
+  --font: "Encode Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --measure: 68ch;
+
+  /* Layout (§7 is undecided; a single contained column is used here) */
+  --page-max: 72rem;
+  --gutter: clamp(var(--uop-space-l), 4vw, var(--uop-space-4xl));
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + var(--uop-space-l)); }
+*, *::before, *::after { box-sizing: inherit; }
+
+body {
+  margin: 0;
+  background: var(--uop-color-surface);
+  color: var(--uop-color-text-primary);
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-stretch: 125%;
+  line-height: 1.15;
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+
+a { color: var(--uop-color-link); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:visited { color: var(--uop-color-link-visited); }
+a:hover { color: var(--uop-color-link-hover); text-decoration-thickness: 2px; }
+
+:focus-visible {
+  outline: 3px solid var(--uop-color-focus);
+  outline-offset: 3px;
+  border-radius: var(--uop-radius-xs);
+}
+
+.skip {
+  position: absolute; left: var(--uop-space-l); top: -10rem;
+  background: var(--uop-color-text-primary); color: var(--uop-color-text-inverse);
+  padding: var(--uop-space-m) var(--uop-space-l); border-radius: var(--uop-radius-m);
+  font-weight: 700; z-index: 10;
+}
+.skip:focus { top: calc(env(safe-area-inset-top, 0px) + var(--uop-space-l)); color: var(--uop-color-text-inverse); }
+
+.wrap { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* ---------- Masthead ---------- */
+.masthead {
+  border-bottom: 1px solid var(--uop-color-border);
+}
+.masthead .wrap {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: var(--uop-space-s) var(--uop-space-xl);
+  padding-top: var(--uop-space-l); padding-bottom: var(--uop-space-l);
+}
+.masthead p { margin: 0; font-size: 0.9375rem; color: var(--uop-color-text-secondary); }
+.masthead strong { color: var(--uop-color-text-primary); font-stretch: 125%; font-weight: 700; }
+
+/* ---------- Intro + directory board ---------- */
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--uop-space-3xl);
+  padding-top: clamp(var(--uop-space-3xl), 7vw, var(--uop-space-6xl));
+  padding-bottom: clamp(var(--uop-space-3xl), 6vw, var(--uop-space-5xl));
+}
+@media (min-width: 60rem) {
+  .intro { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+}
+.intro h1 {
+  font-size: clamp(2.5rem, 7vw, 4.25rem);
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--uop-space-xl);
+}
+.intro .lead {
+  font-size: clamp(1.125rem, 2vw, 1.25rem);
+  line-height: 1.55;
+  max-width: 38ch;
+  margin: 0 0 var(--uop-space-l);
+}
+.intro p { max-width: 46ch; margin: 0 0 var(--uop-space-l); color: var(--uop-color-text-secondary); }
+
+/* The directory board: the one bold element on the page, styled like a
+   building's wayfinding sign. Each row is a destination on this page. */
+.board {
+  background: var(--uop-color-text-primary);
+  color: var(--uop-color-text-inverse);
+  border-radius: var(--uop-radius-xl);
+  padding: var(--uop-space-xl) var(--uop-space-xl) var(--uop-space-l);
+}
+.board h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: var(--uop-space-m);
+  padding-bottom: var(--uop-space-m);
+  border-bottom: 2px solid var(--uop-navy-400);
+  display: flex; justify-content: space-between; gap: var(--uop-space-l);
+}
+.board h2 span { font-stretch: 100%; font-weight: 500; color: var(--uop-navy-100); }
+.board ol { list-style: none; margin: 0; padding: 0; }
+.board li + li { border-top: 1px solid var(--uop-navy-400); }
+.board a {
+  display: grid;
+  grid-template-columns: 0.875rem minmax(0, 1fr) auto 1.5rem;
+  align-items: center;
+  gap: var(--uop-space-m);
+  min-height: 3.5rem;
+  padding: var(--uop-space-m) var(--uop-space-s);
+  margin: 0 calc(var(--uop-space-s) * -1);
+  color: var(--uop-color-text-inverse);
+  text-decoration: none;
+  border-radius: var(--uop-radius-m);
+}
+.board a:visited { color: var(--uop-color-text-inverse); }
+.board a:hover { background: var(--uop-navy-400); color: var(--uop-color-text-inverse); }
+.board a:active { background: var(--uop-navy-300); }
+.board a:focus-visible { outline-color: var(--uop-pink-pale-500); outline-offset: 0; }
+.board .swatch { width: 0.875rem; height: 0.875rem; border-radius: var(--uop-radius-xs); }
+.board .dest { font-stretch: 112%; font-weight: 600; font-size: 1.0625rem; line-height: 1.3; }
+.board .dest small { display: block; font-stretch: 100%; font-weight: 400; font-size: 0.875rem; color: var(--uop-navy-100); }
+.board .count {
+  font-variant-numeric: tabular-nums; font-size: 0.875rem; color: var(--uop-navy-100); white-space: nowrap;
+}
+.board svg { width: 1.5rem; height: 1.5rem; }
+.board a:hover svg { transform: translateX(2px); }
+@media (prefers-reduced-motion: no-preference) {
+  .board svg { transition: transform 120ms ease-out; }
+}
+.board .status { margin: var(--uop-space-m) 0 0; font-size: 0.875rem; color: var(--uop-navy-100); }
+
+/* ---------- Find bar ---------- */
+.find {
+  background: var(--uop-color-surface-alt);
+  padding: var(--uop-space-xl) 0;
+}
+.find .wrap { display: flex; flex-wrap: wrap; align-items: end; gap: var(--uop-space-m) var(--uop-space-xl); }
+.find label { display: block; font-weight: 600; margin-bottom: var(--uop-space-xs); }
+.find .field { flex: 1 1 22rem; max-width: 34rem; }
+.find input {
+  width: 100%;
+  font: inherit;
+  color: var(--uop-color-text-primary);
+  background: var(--uop-color-surface);
+  border: 2px solid var(--uop-color-border-strong);
+  border-radius: var(--uop-radius-s);
+  padding: var(--uop-space-m) var(--uop-space-l);
+  min-height: 3rem;
+}
+.find input:hover { border-color: var(--uop-color-text-primary); }
+.find input:focus-visible { border-color: var(--uop-color-text-primary); outline-offset: 2px; }
+.find .result { margin: 0; font-size: 0.9375rem; color: var(--uop-color-text-secondary); padding-bottom: var(--uop-space-m); }
+
+/* ---------- Sections ---------- */
+main { padding-bottom: var(--uop-space-6xl); }
+.area { padding-top: clamp(var(--uop-space-3xl), 6vw, var(--uop-space-5xl)); }
+.area-head { display: flex; align-items: center; gap: var(--uop-space-m); margin-bottom: var(--uop-space-s); }
+.area-head .swatch { width: 1.25rem; height: 1.25rem; border-radius: var(--uop-radius-xs); flex: none; }
+.area h2 { font-size: clamp(1.625rem, 3.5vw, 2.25rem); font-weight: 750; }
+.area > .wrap > p { max-width: var(--measure); color: var(--uop-color-text-secondary); margin: 0 0 var(--uop-space-xl); }
+
+.session { margin-top: var(--uop-space-2xl); }
+.session-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--uop-space-s) var(--uop-space-m);
+  padding: var(--uop-space-m) 0;
+  border-top: 3px solid var(--uop-color-text-primary);
+}
+.session h3 { font-size: 1.375rem; font-weight: 700; }
+.pill {
+  display: inline-block;
+  font-size: 0.8125rem; font-weight: 700; line-height: 1;
+  padding: var(--uop-space-xs) var(--uop-space-m);
+  border-radius: var(--uop-radius-pill);
+  background: var(--uop-yellow-500); color: var(--uop-color-text-primary);
+}
+.session-head .meta { margin-left: auto; font-size: 0.9375rem; color: var(--uop-color-text-secondary); }
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: var(--uop-space-xl) var(--uop-space-2xl);
+  margin-top: var(--uop-space-m);
+}
+.group h4 {
+  font-size: 1.0625rem; font-weight: 700;
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--uop-space-m);
+  padding-bottom: var(--uop-space-s);
+  border-bottom: 1px solid var(--uop-color-border-strong);
+}
+.group h4 span { font-stretch: 100%; font-weight: 400; font-size: 0.875rem; color: var(--uop-color-text-secondary); }
+.group .about { margin: var(--uop-space-s) 0 0; font-size: 0.9375rem; color: var(--uop-color-text-secondary); }
+.items { list-style: none; margin: var(--uop-space-xs) 0 0; padding: 0; }
+.items a {
+  display: block;
+  padding: var(--uop-space-m) var(--uop-space-m);
+  margin: 0 calc(var(--uop-space-m) * -1);
+  border-radius: var(--uop-radius-m);
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.items a .t { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+.items a:hover { background: var(--uop-pink-pale-200); }
+.items a:hover .t { text-decoration-thickness: 2px; }
+.items a:active { background: var(--uop-color-surface-brand); }
+.items .path {
+  display: block; margin-top: var(--uop-space-2xs);
+  font-weight: 400; font-size: 0.8125rem; color: var(--uop-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* Featured tool tile (top-level tools such as the wheel) */
+.tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr)); gap: var(--uop-space-xl); }
+.tool {
+  background: var(--uop-color-surface-brand);
+  border-radius: var(--uop-radius-l);
+  padding: var(--uop-space-xl) var(--uop-space-xl) var(--uop-space-2xl);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--uop-space-l) var(--uop-space-xl);
+  align-items: center;
+}
+.tool h3 { font-size: 1.5rem; font-weight: 750; margin-bottom: var(--uop-space-xs); }
+.tool p { margin: 0; }
+.tool .path { display: block; font-size: 0.8125rem; color: var(--uop-color-text-secondary); margin-top: var(--uop-space-xs); }
+.tool-mark { width: 5rem; height: 5rem; }
+.btn {
+  grid-column: 1 / -1; justify-self: start;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 3rem; padding: var(--uop-space-m) var(--uop-space-xl);
+  border-radius: var(--uop-radius-pill);
+  background: var(--uop-color-cta); color: var(--uop-color-text-inverse);
+  font-weight: 700; font-stretch: 112%; text-decoration: none;
+}
+.btn:visited { color: var(--uop-color-text-inverse); }
+.btn:hover { background: var(--uop-color-cta-pressed); color: var(--uop-color-text-inverse); }
+.btn:active { background: var(--uop-pink-700); transform: translateY(1px); }
+.btn:focus-visible { outline-color: var(--uop-color-text-primary); outline-offset: 3px; }
+
+.empty {
+  margin-top: var(--uop-space-2xl);
+  padding: var(--uop-space-xl);
+  border: 2px dashed var(--uop-color-border-strong);
+  border-radius: var(--uop-radius-m);
+  max-width: 40rem;
+}
+.empty p { margin: 0 0 var(--uop-space-m); }
+.link-btn {
+  font: inherit; font-weight: 600; color: var(--uop-color-link);
+  background: none; border: 0; padding: var(--uop-space-xs) 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 0.18em;
+}
+.link-btn:hover { color: var(--uop-color-link-hover); text-decoration-thickness: 2px; }
+
+.loading { color: var(--uop-color-text-secondary); padding-top: var(--uop-space-3xl); }
+
+/* ---------- Footer ---------- */
+footer { border-top: 1px solid var(--uop-color-border); font-size: 0.9375rem; color: var(--uop-color-text-secondary); }
+footer .wrap { padding-top: var(--uop-space-xl); padding-bottom: var(--uop-space-2xl); display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--uop-space-m) var(--uop-space-xl); }
+footer p { margin: 0; max-width: var(--measure); }
+
+[hidden] { display: none !important; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#directory">Skip to the directory</a>
+
+<header class="masthead">
+  <div class="wrap">
+    <p><strong>University of Portsmouth</strong></p>
+    <p>UX team, Digital Product and Innovation</p>
+  </div>
+</header>
+
+<div class="wrap intro">
+  <div>
+    <h1>UX Toolkit</h1>
+    <p class="lead">Everything the UX team uses in research sessions, in one place: live prototypes, design variants we’re testing, and tools like the topic wheel.</p>
+    <p>Each research activity has its own section, sorted by date with the newest first. Open Day testing is the first set here; future projects will be added alongside it.</p>
+    <p>These are research prototypes, not live University pages, so some links and content are placeholders.</p>
+  </div>
+
+  <nav class="board" aria-labelledby="board-title">
+    <h2 id="board-title">Directory <span id="board-total"></span></h2>
+    <ol id="board-list" aria-busy="true"></ol>
+    <p class="status" id="board-status">Loading the directory…</p>
+  </nav>
+</div>
+
+<div class="find" role="search">
+  <div class="wrap">
+    <div class="field">
+      <label for="q">Find a prototype or tool</label>
+      <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="For example: footer, route finder, wheel">
+    </div>
+    <p class="result" id="result" aria-live="polite"></p>
+  </div>
+</div>
+
+<main id="directory" tabindex="-1">
+  <div class="wrap loading" id="loading">Loading the directory…</div>
+  <div id="areas"></div>
+  <div class="wrap" id="empty" hidden>
+    <div class="empty">
+      <p id="empty-text"></p>
+      <button type="button" class="link-btn" id="clear">Clear the search</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Maintained by the UX team in Recruitment, Marketing and Communications. To add something, put the HTML file in the repository and it will appear here.</p>
+    <p><a href="https://github.com/University-of-Portsmouth-Web-Team/UX-TOOLKIT">View the repository on GitHub</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* -------------------------------------------------------------------
+     SETTINGS
+     The page asks GitHub for the repository's file list, so new HTML files
+     appear automatically after they're pushed. If GitHub can't be reached
+     (offline venue, private repo, rate limit) it uses FALLBACK_FILES below.
+     Add new paths to FALLBACK_FILES too if the toolkit is used offline.
+     ------------------------------------------------------------------- */
+  var REPO = "University-of-Portsmouth-Web-Team/UX-TOOLKIT";
+  var BRANCH = "main";
+
+  var FALLBACK_FILES = [
+    "WHEEL.html",
+    "OD/2026/24OCT/LOGIN.html",
+    "OD/2026/15NOV/HOMEPAGE/uop-home-v1-core.html",
+    "OD/2026/15NOV/HOMEPAGE/uop-home-v2-clearing.html",
+    "OD/2026/15NOV/HOMEPAGE/uop-home-v3-international.html",
+    "OD/2026/15NOV/HOMEPAGE/uop-home-v4-ucas-deadline.html",
+    "OD/2026/15NOV/HOMEPAGE/uop-home-v5-open-day.html",
+    "OD/2026/15NOV/HEADER/uop-menu-v1-mega.html",
+    "OD/2026/15NOV/HEADER/uop-menu-v2-column-cards.html",
+    "OD/2026/15NOV/HEADER/uop-menu-v3-audience.html",
+    "OD/2026/15NOV/HEADER/uop-menu-v4-search-overlay.html",
+    "OD/2026/15NOV/HEADER/uop-menu-v5-drawer.html",
+    "OD/2026/15NOV/FOOTER/uop-footer-v1-figma.html",
+    "OD/2026/15NOV/FOOTER/uop-footer-v2-cta.html",
+    "OD/2026/15NOV/FOOTER/uop-footer-v3-campuses.html",
+    "OD/2026/15NOV/FOOTER/uop-footer-v4-newsletter.html",
+    "OD/2026/15NOV/FOOTER/uop-footer-v5-compact.html",
+    "OD/2026/15NOV/UG/uop-course-ug-apply-a-route-finder-paginated.html",
+    "OD/2026/15NOV/UG/uop-course-ug-apply-b-timeline.html",
+    "OD/2026/15NOV/UG/uop-course-ug-apply-c-table-checklist-paginated.html",
+    "OD/2026/15NOV/PGT/uop-course-pgt-apply-a-route-finder.html",
+    "OD/2026/15NOV/PGT/uop-course-pgt-apply-b-timeline-paginated.html",
+    "OD/2026/15NOV/PGT/uop-course-pgt-apply-c-table-checklist.html"
+  ];
+
+  /* Research activities, keyed by top-level folder name. Unknown folders
+     still appear, titled from the folder name. */
+  var AREAS = {
+    OD: {
+      title: "Open Day research",
+      intro: "Designs tested with visitors at Open Days, through in-person interviews and the online survey. Each date holds the variants shown on that day."
+    }
+  };
+
+  /* Short notes for design groups (the folder that holds the variants). */
+  var GROUP_NOTES = {
+    HOMEPAGE: "Homepage variants, each led by a different campaign moment.",
+    HEADER: "Main menu patterns.",
+    FOOTER: "Footer layouts.",
+    UG: "Undergraduate course page: how to apply.",
+    PGT: "Postgraduate taught course page: how to apply."
+  };
+
+  /* Notes for top-level tools. */
+  var TOOL_NOTES = {
+    "WHEEL.html": "Spin the wheel to pick a topic. Used at Open Days and in other research sessions."
+  };
+
+  /* Words kept in capitals when turning file names into titles. */
+  var ACRONYMS = { uop: "UoP", ug: "UG", pgt: "PGT", od: "OD", cta: "CTA", ucas: "UCAS", ux: "UX", ui: "UI", ai: "AI", faq: "FAQ" };
+
+  /* Swatches cycle through the secondary palette (§3.1); colour always sits
+     beside a text label, never on its own. Tools always get yellow. */
+  var TOOL_SWATCH = "#FFC700";
+  var AREA_SWATCHES = ["#FFC6E7", "#00C2A8", "#00A8FF", "#7FFFD4", "#FF7A59"];
+
+  var MONTHS = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11 };
+  var MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  /* ------------------------------------------------------------------- */
+
+  function titleFromName(name) {
+    return name.replace(/\.html?$/i, "").split(/[-_\s]+/).filter(Boolean).map(function (w) {
+      var lower = w.toLowerCase();
+      if (ACRONYMS[lower]) return ACRONYMS[lower];
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    }).join(" ");
+  }
+
+  function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
+  function parseDate(year, token) {
+    var m = /^(\d{1,2})([A-Za-z]{3})$/.exec(token || "");
+    if (!m || !/^\d{4}$/.test(year || "")) return null;
+    var mon = MONTHS[m[2].toUpperCase()];
+    if (mon === undefined) return null;
+    var day = parseInt(m[1], 10);
+    return { sort: new Date(+year, mon, day).getTime(), label: day + " " + MONTH_NAMES[mon] + " " + year, id: day + "-" + MONTH_NAMES[mon].toLowerCase() + "-" + year };
+  }
+
+  function buildModel(paths) {
+    var tools = [];
+    var areas = {};
+
+    paths.forEach(function (path) {
+      var parts = path.split("/");
+      var file = parts[parts.length - 1];
+      if (!/\.html?$/i.test(file)) return;
+      if (parts.length === 1 && /^index\.html?$/i.test(file)) return;
+      if (parts.some(function (p) { return p.charAt(0) === "." || p.charAt(0) === "_"; })) return;
+
+      var item = { path: path, file: file, title: titleFromName(file) };
+
+      if (parts.length === 1) {
+        item.note = TOOL_NOTES[file] || "";
+        tools.push(item);
+        return;
+      }
+
+      var areaKey = parts[0];
+      var folders = parts.slice(1, -1);
+      var date = null, rest = folders;
+      if (folders.length >= 2) {
+        date = parseDate(folders[0], folders[1]);
+        if (date) rest = folders.slice(2);
+      }
+      var sessionKey = date ? date.id : "general";
+      var groupKey = rest.length ? rest.join("/") : "";
+
+      var area = areas[areaKey] || (areas[areaKey] = { key: areaKey, sessions: {} });
+      var session = area.sessions[sessionKey] || (area.sessions[sessionKey] = {
+        key: sessionKey,
+        date: date,
+        label: date ? date.label : "Other files",
+        groups: {}
+      });
+      var group = session.groups[groupKey] || (session.groups[groupKey] = {
+        key: groupKey,
+        title: groupKey ? groupKey.split("/").map(titleFromName).join(", ") : "Prototypes",
+        note: groupKey ? (GROUP_NOTES[groupKey.split("/").pop().toUpperCase()] || "") : "",
+        items: []
+      });
+      group.items.push(item);
+    });
+
+    tools.sort(function (a, b) { return a.file.localeCompare(b.file); });
+
+    var areaList = Object.keys(areas).sort().map(function (k, i) {
+      var a = areas[k];
+      var meta = AREAS[k] || {};
+      a.title = meta.title || titleFromName(k);
+      a.intro = meta.intro || "";
+      a.swatch = AREA_SWATCHES[i % AREA_SWATCHES.length];
+      a.id = "area-" + slug(k);
+      a.sessionList = Object.keys(a.sessions).map(function (s) { return a.sessions[s]; }).sort(function (x, y) {
+        return (y.date ? y.date.sort : -1) - (x.date ? x.date.sort : -1);
+      });
+      a.sessionList.forEach(function (s, idx) {
+        s.id = a.id + "-" + slug(s.key);
+        s.latest = idx === 0 && !!s.date && a.sessionList.length > 1;
+        s.groupList = Object.keys(s.groups).map(function (g) { return s.groups[g]; }).sort(function (x, y) {
+          if (!x.key) return 1;
+          if (!y.key) return -1;
+          return x.key.localeCompare(y.key);
+        });
+        s.groupList.forEach(function (g) { g.items.sort(function (p, q) { return p.file.localeCompare(q.file, undefined, { numeric: true }); }); });
+        s.count = s.groupList.reduce(function (n, g) { return n + g.items.length; }, 0);
+      });
+      return a;
+    });
+
+    return { tools: tools, areas: areaList };
+  }
+
+  /* ---------- DOM helpers ---------- */
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === "text") node.textContent = attrs[k];
+      else if (k === "className") node.className = attrs[k];
+      else node.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { if (c) node.appendChild(c); });
+    return node;
+  }
+  function svgArrow() {
+    var ns = "http://www.w3.org/2000/svg";
+    var s = document.createElementNS(ns, "svg");
+    s.setAttribute("viewBox", "0 0 24 24"); s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    var p = document.createElementNS(ns, "path");
+    p.setAttribute("d", "M4 12h14M13 6l6 6-6 6");
+    p.setAttribute("fill", "none"); p.setAttribute("stroke", "currentColor"); p.setAttribute("stroke-width", "2");
+    p.setAttribute("stroke-linecap", "round"); p.setAttribute("stroke-linejoin", "round");
+    s.appendChild(p);
+    return s;
+  }
+  function wheelMark() {
+    var ns = "http://www.w3.org/2000/svg";
+    var s = document.createElementNS(ns, "svg");
+    s.setAttribute("viewBox", "0 0 80 80"); s.setAttribute("class", "tool-mark");
+    s.setAttribute("aria-hidden", "true"); s.setAttribute("focusable", "false");
+    var colours = ["#1E1B4B", "#FF0F7B", "#00C2A8", "#FFC700", "#6A00F4", "#00A8FF"];
+    var n = colours.length, r = 34, cx = 40, cy = 42;
+    for (var i = 0; i < n; i++) {
+      var a0 = (i / n) * Math.PI * 2 - Math.PI / 2, a1 = ((i + 1) / n) * Math.PI * 2 - Math.PI / 2;
+      var path = document.createElementNS(ns, "path");
+      path.setAttribute("d", "M" + cx + " " + cy + " L" + (cx + r * Math.cos(a0)).toFixed(2) + " " + (cy + r * Math.sin(a0)).toFixed(2) +
+        " A" + r + " " + r + " 0 0 1 " + (cx + r * Math.cos(a1)).toFixed(2) + " " + (cy + r * Math.sin(a1)).toFixed(2) + " Z");
+      path.setAttribute("fill", colours[i]);
+      s.appendChild(path);
+    }
+    var hub = document.createElementNS(ns, "circle");
+    hub.setAttribute("cx", cx); hub.setAttribute("cy", cy); hub.setAttribute("r", "6"); hub.setAttribute("fill", "#FFFFFF");
+    s.appendChild(hub);
+    var pin = document.createElementNS(ns, "path");
+    pin.setAttribute("d", "M34 2h12l-6 10z"); pin.setAttribute("fill", "#1E1B4B");
+    s.appendChild(pin);
+    return s;
+  }
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+
+  /* ---------- Render ---------- */
+  var searchable = []; // { node, text, group, session, area }
+
+  function render(model) {
+    var board = document.getElementById("board-list");
+    var areasRoot = document.getElementById("areas");
+    board.textContent = ""; areasRoot.textContent = ""; searchable = [];
+    var total = model.tools.length;
+
+    // Tools
+    if (model.tools.length) {
+      board.appendChild(el("li", null, [
+        el("a", { href: "#tools" }, [
+          el("span", { className: "swatch", style: "background:" + TOOL_SWATCH }),
+          el("span", { className: "dest", text: "Session tools" }),
+          el("span", { className: "count", text: plural(model.tools.length, "tool", "tools") }),
+          svgArrow()
+        ])
+      ]));
+
+      var toolsWrap = el("div", { className: "tools" });
+      model.tools.forEach(function (t) {
+        var isWheel = /^wheel\.html?$/i.test(t.file);
+        var tile = el("article", { className: "tool" }, [
+          el("div", null, [
+            el("h3", { text: t.title }),
+            t.note ? el("p", { text: t.note }) : null,
+            el("span", { className: "path", text: t.path })
+          ]),
+          isWheel ? wheelMark() : null,
+          el("a", { className: "btn", href: encodeURI(t.path), text: "Open " + t.title })
+        ]);
+        toolsWrap.appendChild(tile);
+        searchable.push({ node: tile, text: (t.title + " " + t.path + " " + t.note + " tool").toLowerCase(), section: "tools" });
+      });
+
+      areasRoot.appendChild(el("section", { className: "area", id: "tools", "aria-labelledby": "tools-title" }, [
+        el("div", { className: "wrap" }, [
+          el("div", { className: "area-head" }, [
+            el("span", { className: "swatch", style: "background:" + TOOL_SWATCH, "aria-hidden": "true" }),
+            el("h2", { id: "tools-title", text: "Session tools" })
+          ]),
+          el("p", { text: "Tools we use during research, at Open Days and beyond." }),
+          toolsWrap
+        ])
+      ]));
+    }
+
+    // Research areas
+    model.areas.forEach(function (area) {
+      var wrap = el("div", { className: "wrap" }, [
+        el("div", { className: "area-head" }, [
+          el("span", { className: "swatch", style: "background:" + area.swatch, "aria-hidden": "true" }),
+          el("h2", { id: area.id + "-title", text: area.title })
+        ]),
+        area.intro ? el("p", { text: area.intro }) : null
+      ]);
+
+      area.sessionList.forEach(function (s) {
+        total += s.count;
+        board.appendChild(el("li", null, [
+          el("a", { href: "#" + s.id }, [
+            el("span", { className: "swatch", style: "background:" + area.swatch }),
+            el("span", { className: "dest" }, [
+              document.createTextNode(area.title),
+              el("small", { text: s.label + (s.latest ? " (latest)" : "") })
+            ]),
+            el("span", { className: "count", text: plural(s.count, "file", "files") }),
+            svgArrow()
+          ])
+        ]));
+
+        var groupsWrap = el("div", { className: "groups" });
+        s.groupList.forEach(function (g) {
+          var list = el("ul", { className: "items" });
+          g.items.forEach(function (it) {
+            var li = el("li", null, [
+              el("a", { href: encodeURI(it.path) }, [
+                el("span", { className: "t", text: it.title }),
+                el("span", { className: "path", text: it.path })
+              ])
+            ]);
+            list.appendChild(li);
+            searchable.push({ node: li, text: (it.title + " " + it.path + " " + g.title + " " + area.title + " " + s.label).toLowerCase() });
+          });
+          var countSpan = el("span", { text: g.key ? plural(g.items.length, "variant", "variants") : plural(g.items.length, "file", "files") });
+          var groupNode = el("section", { className: "group", "aria-label": g.title + ", " + s.label }, [
+            el("h4", null, [document.createTextNode(g.title), countSpan]),
+            g.note ? el("p", { className: "about", text: g.note }) : null,
+            list
+          ]);
+          groupsWrap.appendChild(groupNode);
+        });
+
+        var head = el("div", { className: "session-head" }, [
+          el("h3", { text: s.label }),
+          s.latest ? el("span", { className: "pill", text: "Latest" }) : null,
+          el("span", { className: "meta", text: plural(s.groupList.length, "design area", "design areas") + ", " + plural(s.count, "file", "files") })
+        ]);
+        wrap.appendChild(el("div", { className: "session", id: s.id }, [head, groupsWrap]));
+      });
+
+      areasRoot.appendChild(el("section", { className: "area", id: area.id, "aria-labelledby": area.id + "-title" }, [wrap]));
+    });
+
+    document.getElementById("board-total").textContent = plural(total, "file", "files");
+    board.removeAttribute("aria-busy");
+    document.getElementById("loading").hidden = true;
+    applyFilter();
+  }
+
+  /* ---------- Search ---------- */
+  var q = document.getElementById("q");
+  var result = document.getElementById("result");
+  var empty = document.getElementById("empty");
+
+  function applyFilter() {
+    var term = q.value.trim().toLowerCase();
+    var words = term.split(/\s+/).filter(Boolean);
+    var shown = 0;
+    searchable.forEach(function (s) {
+      var match = words.every(function (w) { return s.text.indexOf(w) !== -1; });
+      s.node.hidden = !match;
+      if (match) shown++;
+    });
+    // Hide groups, dates and sections left empty by the filter
+    document.querySelectorAll(".group").forEach(function (g) { g.hidden = !g.querySelector(".items li:not([hidden])"); });
+    document.querySelectorAll(".session").forEach(function (s) { s.hidden = !s.querySelector(".group:not([hidden])"); });
+    document.querySelectorAll(".area").forEach(function (a) {
+      a.hidden = !a.querySelector(".session:not([hidden]), .tool:not([hidden])");
+    });
+
+    if (!words.length) {
+      result.textContent = "";
+      empty.hidden = true;
+    } else if (shown) {
+      result.textContent = "Showing " + plural(shown, "match", "matches") + " for “" + q.value.trim() + "”.";
+      empty.hidden = true;
+    } else {
+      result.textContent = "No matches.";
+      document.getElementById("empty-text").textContent = "Nothing matches “" + q.value.trim() + "”. Try part of a file name, such as “footer” or “v2”, or clear the search to see everything.";
+      empty.hidden = false;
+    }
+  }
+  q.addEventListener("input", applyFilter);
+  document.getElementById("clear").addEventListener("click", function () { q.value = ""; applyFilter(); q.focus(); });
+
+  /* ---------- Load ---------- */
+  var status = document.getElementById("board-status");
+  var CACHE_KEY = "uxtoolkit-tree-v1";
+
+  function useFallback(reason) {
+    render(buildModel(FALLBACK_FILES));
+    status.textContent = reason;
+  }
+
+  function load() {
+    var cached = null;
+    try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "null"); } catch (e) {}
+    if (cached && cached.paths && Date.now() - cached.at < 10 * 60 * 1000) {
+      render(buildModel(cached.paths));
+      status.textContent = "Up to date with the repository.";
+      return;
+    }
+    if (!window.fetch) { useFallback("Showing the saved list of files."); return; }
+
+    var controller = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (controller) controller.abort(); }, 6000);
+
+    fetch("https://api.github.com/repos/" + REPO + "/git/trees/" + BRANCH + "?recursive=1", {
+      headers: { "Accept": "application/vnd.github+json" },
+      signal: controller ? controller.signal : undefined
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(function (data) {
+      clearTimeout(timer);
+      var paths = (data.tree || []).filter(function (n) { return n.type === "blob"; }).map(function (n) { return n.path; });
+      if (!paths.some(function (p) { return /\.html?$/i.test(p) && !/^index\.html?$/i.test(p); })) throw new Error("empty");
+      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), paths: paths })); } catch (e) {}
+      render(buildModel(paths));
+      status.textContent = "Up to date with the repository.";
+    }).catch(function () {
+      clearTimeout(timer);
+      useFallback("Couldn’t reach GitHub, so this is the saved list of files. Anything added recently may be missing.");
+    });
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>
