@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Open Day | University of Portsmouth</title>
+<!--
+  UoP homepage prototype — S8 Open Day — on the day (mobile-first)
+  UX-622 Website Redesign 2025–26 · usability-testing build, not production code.
+  Spine: A Signal · B Hero · C Ask · D Act · E Prove · F Continue (lo-fi homepage sets, Figma 714:440).
+  Tokens and rules: design.md v0.2.0. Search "PROTO:" for every gap or deviation.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wdth,wght@75..125,100..900&display=swap" rel="stylesheet">
+<style>
+/* =========================================================================
+   UoP homepage prototypes — shared styles
+   Built from design.md v0.2.0. Sections relied on: §3.1–3.5 colour,
+   §4.1/4.3 type, §5 spacing, §6 radius, §8.5 icons, §9.1 production
+   constraints, §12.2 states, §12.4–12.5 buttons/forms, §14 accessibility.
+   PROTOTYPE NOTES (deviations / gaps) are marked "PROTO:" inline.
+   ========================================================================= */
+
+:root {
+  /* §3.3 Semantic colour roles */
+  --uop-color-text-primary: #1E1B4B;
+  --uop-color-text-secondary: #565478;
+  --uop-color-text-inverse: #FFFFFF;
+  /* PROTO: design.md Link role (#00A8FF) fails AA at 2.61:1 (§3.5, open Q3).
+     Using Electric Blue/600, the fix §3.5 proposes (4.96:1). */
+  --uop-color-link: #0076B2;
+  --uop-color-link-hover: #00537C;
+  --uop-color-link-visited: #6A00F4;
+  --uop-color-surface: #FFFFFF;
+  --uop-color-surface-alt: #DDDDE4;
+  --uop-color-surface-brand: #FFC6E7;
+  --uop-color-surface-inverse: #1E1B4B;
+  --uop-color-border: #B0AFC0;          /* decorative rules only (§3.5) */
+  --uop-color-border-strong: #83829C;   /* inputs + meaningful boundaries */
+  --uop-color-focus-ring: #FF0F7B;
+  --uop-color-success: #00C2A8;
+  --uop-color-warning: #FFC700;
+  --uop-color-error: #FF7A59;
+  --uop-color-info: #00A8FF;
+
+  /* §3.4 CTA pairings — primary is white on Pink/600, never Pink/500 */
+  --uop-color-cta-primary: #D90D69;
+  --uop-color-cta-primary-hover: #B90B5A;
+  --uop-color-cta-primary-pressed: #9D0A4D;
+  --uop-color-cta-accent: #6A00F4;
+  --uop-color-cta-accent-hover: #5F00DC;
+  --uop-color-cta-accent-pressed: #5500C6;
+
+  /* §3.2 ramp steps used as tinted panel backgrounds (Navy text on all, ≥12:1) */
+  --uop-color-tint-teal: #D9F6F2;
+  --uop-color-tint-blue: #D9F2FF;
+  --uop-color-tint-pink: #FFDBEB;
+  --uop-color-tint-purple: #E9D9FD;
+  --uop-color-tint-yellow: #FFF7D9;
+  --uop-color-tint-coral: #FFEBE6;
+  /* §3.1 core palette, used as decorative fills only */
+  --uop-color-pink: #FF0F7B;
+  --uop-color-blue: #00A8FF;
+  --uop-color-teal: #00C2A8;
+  --uop-color-aqua: #7FFFD4;
+  --uop-color-pink-pale: #FFC6E7;
+  --uop-color-purple: #6A00F4;
+  --uop-color-yellow: #FFC700;
+  --uop-color-navy-400: #565478;
+
+  /* §5 spacing */
+  --uop-space-3xs: 0.125rem; --uop-space-2xs: 0.25rem; --uop-space-xs: 0.375rem;
+  --uop-space-s: 0.5rem; --uop-space-m: 0.75rem; --uop-space-l: 1rem;
+  --uop-space-xl: 1.5rem; --uop-space-2xl: 2rem; --uop-space-3xl: 2.5rem;
+  --uop-space-4xl: 3rem; --uop-space-5xl: 4rem; --uop-space-6xl: 5rem;
+  --uop-space-7xl: 6rem; --uop-space-8xl: 8rem;
+
+  /* §6 radius */
+  --uop-radius-0: 0; --uop-radius-xs: 0.25rem; --uop-radius-s: 0.375rem;
+  --uop-radius-m: 0.5rem; --uop-radius-l: 0.75rem; --uop-radius-xl: 1rem;
+  --uop-radius-pill: 999px; --uop-radius-full: 50%;
+
+  /* §4.1 Encode Sans is the only face design.md confirms is in Figma.
+     PROTO: display face is undecided (§4.1, open Q5). Display is set in
+     Encode Sans at a condensed width as a stand-in. */
+  --uop-font: "Encode Sans", "Encode Sans Variable", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  /* PROTO: type ramp values are 🔲 (§4.2). Desktop sizes follow the
+     provisional [NEW] styles (§4.3); mobile minimums are a stand-in. */
+  --uop-type-h1: clamp(2.25rem, 1.4rem + 3.6vw, 3.5rem);
+  --uop-type-h2: clamp(1.75rem, 1.2rem + 2.4vw, 3rem);
+  --uop-type-h3: clamp(1.375rem, 1.1rem + 1.2vw, 2rem);
+  --uop-type-h4: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  --uop-type-h5: 1.25rem;
+  --uop-type-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --uop-type-body: 1rem;
+  --uop-type-small: 0.875rem;
+
+  /* PROTO: grid is 🔲 (§7). Container taken from the Figma header
+     container (1312px inside 1440). */
+  --uop-container: 82rem;
+  --uop-gutter: clamp(var(--uop-space-l), 4vw, var(--uop-space-5xl));
+  --uop-section: clamp(var(--uop-space-3xl), 6vw, var(--uop-space-6xl));
+}
+
+/* ---------- Reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 6rem; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0; font-family: var(--uop-font); font-size: var(--uop-type-body);
+  line-height: 1.55; color: var(--uop-color-text-primary);
+  background: var(--uop-color-surface); font-variation-settings: "wdth" 100;
+}
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, h4, h5, h6 { margin: 0; line-height: 1.15; font-weight: 750; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; }
+button, input, select { font: inherit; color: inherit; }
+
+.display {
+  text-transform: uppercase; font-stretch: 80%; font-variation-settings: "wdth" 80;
+  font-weight: 800; letter-spacing: 0.005em; line-height: 1.02;
+}
+.h1 { font-size: var(--uop-type-h1); }
+.h2 { font-size: var(--uop-type-h2); }
+.h3 { font-size: var(--uop-type-h3); }
+.h4 { font-size: var(--uop-type-h4); }
+.lead { font-size: var(--uop-type-lead); line-height: 1.5; max-width: 38em; }
+.muted { color: var(--uop-color-text-secondary); }
+.small { font-size: var(--uop-type-small); }
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+a { color: var(--uop-color-link); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--uop-color-link-hover); text-decoration-thickness: 2px; }
+a:visited { color: var(--uop-color-link-visited); }
+.on-dark a:not(.btn), .link-plain { color: inherit; }
+.on-dark a:not(.btn):visited { color: inherit; }
+[hidden] { display: none !important; }
+
+/* §14 Focus: Pink/500 ring is 1.33:1 against a Pink/600 button (§3.7f),
+   so the ring is offset to sit on the surrounding surface instead. */
+:focus-visible {
+  outline: 3px solid var(--uop-color-focus-ring); outline-offset: 3px;
+  border-radius: var(--uop-radius-xs);
+}
+
+.skip-link {
+  position: absolute; left: var(--uop-space-l); top: -4rem; z-index: 100;
+  background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse);
+  padding: var(--uop-space-m) var(--uop-space-l); border-radius: var(--uop-radius-m);
+}
+.skip-link:focus { top: var(--uop-space-l); color: var(--uop-color-text-inverse); }
+
+.container { width: 100%; max-width: var(--uop-container); margin-inline: auto; padding-inline: var(--uop-gutter); }
+.section { padding-block: var(--uop-section); }
+.section--tight { padding-block: clamp(var(--uop-space-2xl), 4vw, var(--uop-space-4xl)); }
+.section--alt { background: var(--uop-color-tint-blue); }
+.section--inverse { background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); }
+.stack > * + * { margin-top: var(--uop-space-l); }
+.stack-l > * + * { margin-top: var(--uop-space-xl); }
+
+.section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--uop-space-l); margin-bottom: var(--uop-space-2xl); }
+.section-head p { max-width: 36em; }
+
+/* Eyebrow — Figma "Heading with line" pattern. Used only where it names the zone's task. */
+.eyebrow { display: inline-flex; align-items: center; gap: var(--uop-space-m); font-weight: 650; font-size: var(--uop-type-small); color: var(--uop-color-text-secondary); }
+.eyebrow::before { content: ""; width: 2.5rem; height: 2px; background: currentColor; }
+.on-dark .eyebrow { color: var(--uop-color-text-inverse); }
+
+/* ---------- Icons (PROTO: library undecided, §8.1–8.2; 24px grid, 2px round strokes as stand-in) ---------- */
+.icon { display: inline-block; vertical-align: -0.25em; width: 1.25em; height: 1.25em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon--lg { width: 2rem; height: 2rem; }
+
+/* ---------- Buttons §12.4 — six states §12.2 ---------- */
+.btn {
+  --btn-bg: var(--uop-color-cta-primary); --btn-fg: var(--uop-color-text-inverse); --btn-bd: var(--btn-bg);
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--uop-space-s);
+  min-height: 2.75rem; padding: var(--uop-space-m) var(--uop-space-xl);
+  border-radius: var(--uop-radius-pill); border: 2px solid var(--btn-bd);
+  background: var(--btn-bg); color: var(--btn-fg); font-weight: 700; font-size: 0.9375rem;
+  text-decoration: none; cursor: pointer; line-height: 1.2; white-space: nowrap;
+}
+.btn:visited { color: var(--btn-fg); }
+.btn:hover { --btn-bg: var(--uop-color-cta-primary-hover); color: var(--btn-fg); text-decoration: none; }
+.btn:active { --btn-bg: var(--uop-color-cta-primary-pressed); transform: translateY(1px); }
+.btn--accent { --btn-bg: var(--uop-color-cta-accent); }
+.btn--accent:hover { --btn-bg: var(--uop-color-cta-accent-hover); }
+.btn--accent:active { --btn-bg: var(--uop-color-cta-accent-pressed); }
+.btn--secondary { --btn-bg: transparent; --btn-fg: var(--uop-color-text-primary); --btn-bd: var(--uop-color-text-primary); }
+.btn--secondary:hover { --btn-bg: var(--uop-color-text-primary); --btn-fg: var(--uop-color-text-inverse); --btn-bd: var(--uop-color-text-primary); }
+.btn--secondary:active { --btn-bg: #14112F; }
+.on-dark .btn--secondary { --btn-fg: var(--uop-color-text-inverse); --btn-bd: var(--uop-color-text-inverse); }
+.on-dark .btn--secondary:hover { --btn-bg: var(--uop-color-surface); --btn-fg: var(--uop-color-text-primary); }
+.btn--white { --btn-bg: var(--uop-color-surface); --btn-fg: var(--uop-color-text-primary); --btn-bd: var(--uop-color-surface); }
+.btn--white:hover { --btn-bg: var(--uop-color-tint-pink); --btn-bd: var(--uop-color-tint-pink); --btn-fg: var(--uop-color-text-primary); }
+.btn--sm { min-height: 2.25rem; padding: var(--uop-space-s) var(--uop-space-l); font-size: 0.875rem; }
+.btn[disabled], .btn[aria-disabled="true"] {
+  --btn-bg: var(--uop-color-surface-alt); --btn-fg: var(--uop-color-text-secondary); --btn-bd: var(--uop-color-surface-alt);
+  cursor: not-allowed; transform: none;
+}
+.btn.is-loading { pointer-events: none; color: transparent; position: relative; }
+.btn.is-loading::after {
+  content: ""; position: absolute; width: 1.1rem; height: 1.1rem; border-radius: 50%;
+  border: 2px solid var(--btn-fg); border-right-color: transparent; color: var(--btn-fg);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .btn.is-loading::after { animation-duration: 2.4s; } }
+
+/* Tertiary = text button */
+.btn-text { display: inline-flex; align-items: center; gap: var(--uop-space-xs); font-weight: 700; color: var(--uop-color-text-primary); text-decoration: underline; text-underline-offset: 0.25em; background: none; border: 0; padding: var(--uop-space-2xs) 0; cursor: pointer; min-height: 2.75rem; }
+.btn-text:visited { color: var(--uop-color-text-primary); }
+.btn-text:hover { color: var(--uop-color-text-primary); text-decoration-thickness: 3px; text-decoration-color: var(--uop-color-pink); }
+.on-dark .btn-text, .on-dark .btn-text:visited, .on-dark .btn-text:hover { color: var(--uop-color-text-inverse); }
+
+.icon-btn { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: var(--uop-radius-full); border: 0; background: transparent; color: inherit; cursor: pointer; }
+.icon-btn:hover { background: rgba(30, 27, 75, 0.08); }
+.on-dark .icon-btn:hover, .band .icon-btn:hover { background: rgba(255, 255, 255, 0.16); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--uop-space-m); align-items: center; }
+
+/* ---------- Header (Figma 1180:14648) ---------- */
+.site-header { position: sticky; top: 0; z-index: 50; background: var(--uop-color-surface); border-bottom: 1px solid var(--uop-color-border); }
+.utility { background: var(--uop-color-surface-alt); font-size: 0.8125rem; }
+.utility .container { display: flex; justify-content: flex-end; gap: var(--uop-space-xl); align-items: center; min-height: 2.25rem; }
+.utility a, .utility button { color: var(--uop-color-text-primary); }
+.utility button { background: none; border: 0; display: inline-flex; gap: var(--uop-space-2xs); align-items: center; cursor: pointer; padding: var(--uop-space-xs) 0; }
+.utility .sep { width: 1px; height: 0.9rem; background: var(--uop-color-text-secondary); }
+.nav-bar .container { display: flex; align-items: center; justify-content: space-between; gap: var(--uop-space-xl); min-height: 4.5rem; }
+/* PROTO: logo asset couldn't be exported from Figma here — text lockup stand-in. Replace with the official SVG. */
+.logo-svg { width: 134px; height: 48px; display: block; }
+.site-footer .logo-svg { width: 160px; height: 57px; }
+@media (max-width: 36rem) { .logo-svg { width: 112px; height: 40px; } }
+.logo { display: inline-flex; align-items: center; gap: var(--uop-space-s); text-decoration: none; color: var(--uop-color-text-primary); line-height: 1; }
+.logo:visited, .logo:hover { color: var(--uop-color-text-primary); }
+.logo__mark { width: 2.25rem; height: 2.75rem; flex: none; }
+.logo__type { display: grid; font-weight: 800; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.01em; font-variation-settings: "wdth" 88; }
+.logo__type small { font-size: 0.6rem; font-weight: 700; }
+.primary-nav ul { list-style: none; display: flex; gap: var(--uop-space-xl); }
+.primary-nav a { display: inline-flex; align-items: center; gap: var(--uop-space-2xs); font-weight: 700; font-size: 0.9375rem; color: var(--uop-color-text-primary); text-decoration: none; padding-block: var(--uop-space-m); border-bottom: 3px solid transparent; }
+.primary-nav a:visited { color: var(--uop-color-text-primary); }
+.primary-nav a:hover { border-bottom-color: var(--uop-color-pink); color: var(--uop-color-text-primary); }
+.nav-actions { display: flex; align-items: center; gap: var(--uop-space-m); }
+.campaign-pill { background: var(--uop-color-tint-purple); color: var(--uop-color-text-primary); border-radius: var(--uop-radius-pill); padding: var(--uop-space-s) var(--uop-space-l); font-weight: 700; font-size: 0.875rem; text-decoration: none; white-space: nowrap; }
+.campaign-pill:visited { color: var(--uop-color-text-primary); }
+.campaign-pill:hover { background: var(--uop-color-cta-accent); color: var(--uop-color-text-inverse); }
+.search-jump { display: inline-flex; align-items: center; gap: var(--uop-space-s); min-width: 12.5rem; min-height: 2.75rem; padding-inline: var(--uop-space-l); border-radius: var(--uop-radius-m); border: 1px solid var(--uop-color-border-strong); background: var(--uop-color-surface); color: var(--uop-color-text-secondary); cursor: pointer; font-weight: 600; font-size: 0.875rem; text-decoration: none; }
+.search-jump:visited { color: var(--uop-color-text-secondary); }
+.search-jump:hover { border-color: var(--uop-color-text-primary); color: var(--uop-color-text-primary); }
+.menu-toggle { display: none; }
+
+@media (max-width: 68rem) {
+  .primary-nav { display: none; position: absolute; inset: 100% 0 auto 0; background: var(--uop-color-surface); border-bottom: 1px solid var(--uop-color-border); padding: var(--uop-space-l) var(--uop-gutter) var(--uop-space-xl); box-shadow: 0 12px 24px rgba(30,27,75,.12); }
+  .primary-nav.is-open { display: block; }
+  .primary-nav ul { flex-direction: column; gap: 0; }
+  .primary-nav a { width: 100%; justify-content: space-between; padding-block: var(--uop-space-m); border-bottom: 1px solid var(--uop-color-surface-alt); }
+  .menu-toggle { display: inline-grid; }
+  .search-jump { min-width: 0; padding-inline: var(--uop-space-m); }
+  .search-jump span { display: none; }
+  .campaign-pill { display: none; }
+  .utility .container { justify-content: space-between; }
+}
+
+/* ---------- Bands (Zone A · Signal) ---------- */
+.band { padding-block: var(--uop-space-m); }
+.band .container { display: flex; align-items: center; gap: var(--uop-space-l); flex-wrap: wrap; }
+.band__body { flex: 1 1 22rem; display: flex; gap: var(--uop-space-m); align-items: flex-start; }
+.band__body strong { font-weight: 750; }
+.band__actions { display: flex; gap: var(--uop-space-s); align-items: center; }
+.band--warning { background: var(--uop-color-warning); color: var(--uop-color-text-primary); }
+.band--info { background: var(--uop-color-tint-blue); color: var(--uop-color-text-primary); border-bottom: 1px solid var(--uop-color-border-strong); }
+.band--accent { background: var(--uop-color-cta-accent); color: var(--uop-color-text-inverse); }
+.band--inverse { background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); }
+.band[hidden] { display: none; }
+
+/* ---------- Image placeholders + wave mask (§9.1: real masks, not shapes on top) ---------- */
+/* PROTO: photography is 🔲 (§10). Placeholders name the intended shot so they can be swapped 1:1. */
+.ph {
+  position: relative; display: grid; place-items: end start; overflow: hidden;
+  background: var(--ph-bg, #E4E4EA); color: var(--uop-color-text-primary);
+  border-radius: var(--uop-radius-xl); aspect-ratio: var(--ph-ratio, 4 / 3);
+  padding: var(--uop-space-xl);
+}
+/* Brand knot (geometry from the hi-fi hero, Style Guide 480:26495). On pale tints the soft-light
+   blend would be invisible, so the knot takes the tone's core colour at low opacity instead. */
+.ph__knot { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ph__knot path { fill: var(--ph-shape, #FFFFFF); opacity: .85; } /* photo stand-in: grey and white, no colour */
+.ph__label { position: relative; display: inline-flex; gap: var(--uop-space-s); align-items: center; background: var(--uop-color-surface); border-radius: var(--uop-radius-pill); padding: var(--uop-space-xs) var(--uop-space-m); font-size: 0.8125rem; font-weight: 600; max-width: 100%; }
+.ph--teal { --ph-bg: #E4E4EA; --ph-shape: #FFFFFF; }
+.ph--blue { --ph-bg: #E4E4EA; --ph-shape: #FFFFFF; }
+.ph--pink { --ph-bg: #E4E4EA; --ph-shape: #FFFFFF; }
+.ph--purple { --ph-bg: #E4E4EA; --ph-shape: #FFFFFF; }
+.ph--yellow { --ph-bg: #E4E4EA; --ph-shape: #FFFFFF; }
+.ph--wide { --ph-ratio: 16 / 9; }
+
+/* Wave masks — PROTO: wave assets not yet produced (§9.2). Single-curve stand-in,
+   tiles horizontally, fixed height so the curve never distorts. */
+.wave-bottom {
+  -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 2.5rem) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpath d='M0 0h400v14c-60 26-130 26-200 6S60-6 0 22z'/%3E%3C/svg%3E") bottom / 100% 2.5rem no-repeat;
+          mask: linear-gradient(#000 0 0) top / 100% calc(100% - 2.5rem) no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40' preserveAspectRatio='none'%3E%3Cpath d='M0 0h400v14c-60 26-130 26-200 6S60-6 0 22z'/%3E%3C/svg%3E") bottom / 100% 2.5rem no-repeat;
+}
+.wave-left {
+  -webkit-mask: linear-gradient(#000 0 0) right / calc(100% - 2.5rem) 100% no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 400' preserveAspectRatio='none'%3E%3Cpath d='M40 0v400H26C0 340 0 270 20 200S46 60 18 0z'/%3E%3C/svg%3E") left / 2.5rem 100% no-repeat;
+          mask: linear-gradient(#000 0 0) right / calc(100% - 2.5rem) 100% no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 400' preserveAspectRatio='none'%3E%3Cpath d='M40 0v400H26C0 340 0 270 20 200S46 60 18 0z'/%3E%3C/svg%3E") left / 2.5rem 100% no-repeat;
+}
+.wave-right {
+  -webkit-mask: linear-gradient(#000 0 0) left / calc(100% - 2.5rem) 100% no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 400' preserveAspectRatio='none'%3E%3Cpath d='M0 0v400h14c26-60 26-130 6-200S-6 60 22 0z'/%3E%3C/svg%3E") right / 2.5rem 100% no-repeat;
+          mask: linear-gradient(#000 0 0) left / calc(100% - 2.5rem) 100% no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 400' preserveAspectRatio='none'%3E%3Cpath d='M0 0v400h14c26-60 26-130 6-200S-6 60 22 0z'/%3E%3C/svg%3E") right / 2.5rem 100% no-repeat;
+}
+
+/* ---------- Zone B · Hero ---------- */
+.hero { padding-block: clamp(var(--uop-space-2xl), 5vw, var(--uop-space-5xl)) clamp(var(--uop-space-4xl), 7vw, var(--uop-space-7xl)); }
+.hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(var(--uop-space-2xl), 5vw, var(--uop-space-5xl)); align-items: center; }
+.hero__text > * + * { margin-top: var(--uop-space-xl); }
+.hero__text .btn-row { margin-top: var(--uop-space-2xl); }
+@media (max-width: 52rem) { .hero__grid { grid-template-columns: 1fr; } .hero__media { order: -1; } }
+
+/* Takeover hero — full-bleed, wave-shaped colour fields (Figma section header hero) */
+.takeover { position: relative; overflow: hidden; background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); isolation: isolate; }
+.takeover__knot { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+.takeover__knot path { fill: #413C74; } /* = #D1D1D1 soft-light over Navy, as the hi-fi hero */
+.takeover__waves { position: absolute; left: 0; right: 0; bottom: 0; z-index: -1; width: 100%; height: clamp(4rem, 9vw, 8rem); }
+.takeover .container { padding-block: clamp(var(--uop-space-4xl), 9vw, var(--uop-space-8xl)) clamp(var(--uop-space-6xl), 12vw, 11rem); }
+.takeover__text { max-width: 40rem; }
+.takeover__text > * + * { margin-top: var(--uop-space-xl); }
+.takeover__text .btn-row { margin-top: var(--uop-space-2xl); }
+.takeover--short .container { padding-block: var(--uop-space-3xl) var(--uop-space-6xl); }
+.takeover__panel { background: rgba(30,27,75,.86); border-radius: var(--uop-radius-xl); padding: var(--uop-space-xl); display: inline-block; }
+
+/* ---------- Zone C · Ask (on-page search + AI) ---------- */
+.ask { position: relative; z-index: 2; margin-top: calc(-1 * clamp(var(--uop-space-3xl), 7vw, var(--uop-space-6xl))); }
+.ask__card { background: var(--uop-color-surface); border-radius: var(--uop-radius-xl); box-shadow: 0 1px 2px rgba(30,27,75,.08), 0 18px 40px -12px rgba(30,27,75,.28); padding: clamp(var(--uop-space-xl), 3vw, var(--uop-space-3xl)); border: 1px solid var(--uop-color-surface-alt); }
+.ask__top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--uop-space-m); margin-bottom: var(--uop-space-l); }
+.segmented { display: inline-flex; padding: var(--uop-space-2xs); background: var(--uop-color-surface-alt); border-radius: var(--uop-radius-pill); border: 0; margin: 0; }
+.segmented legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented label { display: inline-flex; align-items: center; gap: var(--uop-space-xs); padding: var(--uop-space-s) var(--uop-space-l); border-radius: var(--uop-radius-pill); font-weight: 700; font-size: 0.875rem; cursor: pointer; min-height: 2.5rem; color: var(--uop-color-text-primary); }
+.segmented label:hover { background: rgba(255,255,255,.6); }
+.segmented input:checked + label { background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); }
+.segmented input:focus-visible + label { outline: 3px solid var(--uop-color-focus-ring); outline-offset: 2px; }
+.ask__field { display: flex; gap: var(--uop-space-s); align-items: stretch; border: 2px solid var(--uop-color-border-strong); border-radius: var(--uop-radius-pill); padding: var(--uop-space-2xs) var(--uop-space-2xs) var(--uop-space-2xs) var(--uop-space-l); background: var(--uop-color-surface); }
+.ask__field:hover { border-color: var(--uop-color-text-primary); }
+.ask__field:focus-within { border-color: var(--uop-color-text-primary); outline: 3px solid var(--uop-color-focus-ring); outline-offset: 3px; }
+.ask__field .icon { align-self: center; color: var(--uop-color-text-secondary); }
+.ask__field input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-size: 1.0625rem; padding-inline: var(--uop-space-xs); min-height: 3rem; }
+.ask__field input::placeholder { color: var(--uop-color-text-secondary); opacity: 1; }
+.ask__chips { display: flex; flex-wrap: wrap; gap: var(--uop-space-s); margin-top: var(--uop-space-l); align-items: center; }
+.ask__chips > span { font-weight: 650; font-size: 0.875rem; margin-right: var(--uop-space-2xs); }
+.chip { border: 1px solid var(--uop-color-border-strong); background: var(--uop-color-surface); border-radius: var(--uop-radius-pill); padding: var(--uop-space-s) var(--uop-space-m); font-size: 0.875rem; font-weight: 600; cursor: pointer; min-height: 2.5rem; color: var(--uop-color-text-primary); text-align: left; }
+.chip:hover { background: var(--uop-color-tint-purple); border-color: var(--uop-color-cta-accent); }
+.chip:active { background: var(--uop-color-tint-pink); }
+.chip[aria-pressed="true"] { background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); border-color: var(--uop-color-surface-inverse); }
+.chip[disabled] { opacity: .55; cursor: not-allowed; }
+.ask__note { display: flex; gap: var(--uop-space-s); align-items: flex-start; margin-top: var(--uop-space-l); font-size: 0.8125rem; color: var(--uop-color-text-secondary); }
+.ask__result { margin-top: var(--uop-space-l); border-radius: var(--uop-radius-m); background: var(--uop-color-tint-blue); padding: var(--uop-space-l); display: none; }
+.ask__result.is-visible { display: block; }
+.ask__rule { margin-top: var(--uop-space-l); border-left: 4px solid var(--uop-color-cta-accent); background: var(--uop-color-tint-purple); padding: var(--uop-space-m) var(--uop-space-l); border-radius: 0 var(--uop-radius-m) var(--uop-radius-m) 0; font-size: 0.875rem; }
+@media (max-width: 36rem) {
+  .ask__field { border-radius: var(--uop-radius-l); flex-wrap: wrap; padding: var(--uop-space-s); }
+  .ask__field .btn { width: 100%; }
+  .segmented { width: 100%; } .segmented label { flex: 1; justify-content: center; }
+}
+
+/* ---------- Zone D · Act ---------- */
+.finder { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); gap: var(--uop-space-m); }
+.subject {
+  display: flex; flex-direction: column; justify-content: space-between; gap: var(--uop-space-xl);
+  min-height: 7.5rem; padding: var(--uop-space-l); border-radius: var(--uop-radius-l);
+  background: var(--uop-color-surface); border: 1px solid var(--uop-color-border-strong);
+  color: var(--uop-color-text-primary); text-decoration: none; font-weight: 750; font-size: 1.0625rem;
+}
+.subject:visited { color: var(--uop-color-text-primary); }
+.subject:hover { background: var(--uop-color-tint-teal); border-color: var(--uop-color-text-primary); color: var(--uop-color-text-primary); }
+.subject:active { background: var(--uop-color-aqua); }
+.subject__meta { font-weight: 500; font-size: 0.8125rem; color: var(--uop-color-text-secondary); display: flex; justify-content: space-between; align-items: center; gap: var(--uop-space-s); }
+.subject .status { font-weight: 700; }
+
+.level-tabs { display: flex; flex-wrap: wrap; gap: var(--uop-space-s); margin-bottom: var(--uop-space-xl); }
+
+.router { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: var(--uop-space-m); }
+.router a { display: flex; align-items: center; justify-content: center; text-align: center; min-height: 4.25rem; padding: var(--uop-space-m); border-radius: var(--uop-radius-pill); background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); font-weight: 700; text-decoration: none; }
+.router a:visited { color: var(--uop-color-text-inverse); }
+.router a:hover { background: var(--uop-color-cta-accent); color: var(--uop-color-text-inverse); }
+
+.steps { list-style: none; counter-reset: step; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--uop-space-xl); }
+.steps li { counter-increment: step; position: relative; padding-top: var(--uop-space-4xl); }
+.steps li::before { content: counter(step); position: absolute; top: 0; left: 0; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: var(--uop-radius-full); background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); font-weight: 800; }
+.steps li::after { content: ""; position: absolute; top: 1.25rem; left: 3.25rem; right: calc(-1 * var(--uop-space-xl) + 0.75rem); height: 2px; background: var(--uop-color-border); }
+.steps li:last-child::after { display: none; }
+.steps h3 { font-size: 1.125rem; margin-bottom: var(--uop-space-s); }
+.steps p { color: var(--uop-color-text-secondary); font-size: 0.9375rem; }
+@media (max-width: 40rem) { .steps li::after { display: none; } }
+
+.contact-panel { border-radius: var(--uop-radius-xl); background: var(--uop-color-tint-yellow); padding: clamp(var(--uop-space-xl), 3vw, var(--uop-space-3xl)); display: grid; gap: var(--uop-space-xl); }
+.contact-panel__phone { font-size: clamp(1.75rem, 1.2rem + 2.6vw, 3rem); font-weight: 850; font-variation-settings: "wdth" 82; color: var(--uop-color-text-primary); text-decoration: none; display: inline-flex; align-items: center; gap: var(--uop-space-m); line-height: 1; }
+.contact-panel__phone:visited { color: var(--uop-color-text-primary); }
+.contact-panel__phone:hover { color: var(--uop-color-text-primary); text-decoration: underline; text-decoration-color: var(--uop-color-pink); text-decoration-thickness: 4px; }
+.status-dot { display: inline-flex; align-items: center; gap: var(--uop-space-s); font-weight: 700; font-size: 0.875rem; }
+.status-dot::before { content: ""; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: var(--uop-color-teal); box-shadow: 0 0 0 3px rgba(0,194,168,.25); }
+
+.quick-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr)); gap: var(--uop-space-m); list-style: none; }
+.quick-links a { display: flex; flex-direction: column; align-items: flex-start; gap: var(--uop-space-m); padding: var(--uop-space-l); border-radius: var(--uop-radius-l); background: var(--uop-color-surface); border: 1px solid var(--uop-color-border-strong); color: var(--uop-color-text-primary); font-weight: 700; text-decoration: none; min-height: 6.5rem; }
+.quick-links a:visited { color: var(--uop-color-text-primary); }
+.quick-links a:hover { background: var(--uop-color-tint-pink); border-color: var(--uop-color-text-primary); }
+
+/* ---------- Zone E · Prove ---------- */
+.bento { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto; gap: var(--uop-space-l); }
+.bento > * { border-radius: var(--uop-radius-xl); padding: var(--uop-space-2xl); display: flex; flex-direction: column; justify-content: space-between; gap: var(--uop-space-xl); min-height: 15rem; }
+.bento__tall { grid-row: span 2; background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); }
+.bento__teal { background: var(--uop-color-tint-teal); }
+.bento__blue { background: var(--uop-color-tint-blue); }
+.bento__pink { background: var(--uop-color-tint-pink); }
+.bento__purple { background: var(--uop-color-tint-purple); }
+.bento__yellow { background: var(--uop-color-tint-yellow); }
+.bento__img { padding: 0 !important; overflow: hidden; }
+.bento__img .ph { height: 100%; border-radius: 0; aspect-ratio: auto; min-height: 15rem; }
+.stat__label { font-size: 1.125rem; font-weight: 700; line-height: 1.3; }
+.stat__big { font-size: clamp(3rem, 2rem + 4vw, 5rem); font-weight: 850; font-variation-settings: "wdth" 80; line-height: 0.95; text-transform: uppercase; }
+.stat__rule { border: 0; border-top: 1px solid currentColor; margin: 0; opacity: .45; }
+.stat__text { font-size: 0.9375rem; }
+@media (max-width: 60rem) { .bento { grid-template-columns: 1fr 1fr; } .bento__tall { grid-row: auto; grid-column: span 2; } }
+@media (max-width: 36rem) { .bento { grid-template-columns: 1fr; } .bento__tall { grid-column: auto; } }
+
+.stats-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--uop-space-xl); list-style: none; }
+.stats-strip li { border-top: 4px solid var(--uop-color-pink); padding-top: var(--uop-space-l); }
+.on-dark .stats-strip li { border-top-color: var(--uop-color-aqua); }
+.stats-strip .stat__big { font-size: clamp(2.5rem, 1.8rem + 2.6vw, 4rem); }
+
+.promo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(var(--uop-space-2xl), 5vw, var(--uop-space-6xl)); align-items: center; }
+.promo__text > * + * { margin-top: var(--uop-space-l); }
+.promo__text .btn-row { margin-top: var(--uop-space-xl); }
+@media (max-width: 48rem) { .promo { grid-template-columns: 1fr; } }
+
+.strapline { background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); overflow: hidden; position: relative; isolation: isolate; }
+.strapline .container { padding-block: clamp(var(--uop-space-4xl), 8vw, var(--uop-space-8xl)); display: grid; gap: var(--uop-space-xl); }
+.strapline__line { font-size: clamp(3.25rem, 1rem + 10vw, 9rem); }
+.strapline__knot { position: absolute; z-index: -1; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.strapline__knot path { fill: var(--uop-color-purple); opacity: .55; }
+
+.story { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(var(--uop-space-2xl), 5vw, var(--uop-space-6xl)); align-items: center; }
+.quote { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem); font-weight: 750; line-height: 1.22; font-variation-settings: "wdth" 88; text-wrap: balance; }
+.quote-by { display: flex; gap: var(--uop-space-m); align-items: center; margin-top: var(--uop-space-xl); }
+.quote-by__avatar { width: 3.5rem; height: 3.5rem; border-radius: var(--uop-radius-full); background: var(--uop-color-tint-pink); display: grid; place-items: center; font-weight: 800; flex: none; }
+.video { position: relative; }
+.video .play { position: absolute; inset: 0; margin: auto; width: 5rem; height: 5rem; border-radius: 50%; background: var(--uop-color-cta-accent); color: var(--uop-color-text-inverse); border: 0; display: grid; place-items: center; cursor: pointer; }
+.video .play:hover { background: var(--uop-color-cta-accent-hover); transform: scale(1.04); }
+.video .play:active { background: var(--uop-color-cta-accent-pressed); }
+.video .play .icon { width: 2rem; height: 2rem; fill: currentColor; stroke: none; margin-left: 4px; }
+@media (max-width: 52rem) { .story { grid-template-columns: 1fr; } .story .video { order: -1; } }
+
+.faq { max-width: 52rem; }
+.faq details { border-bottom: 1px solid var(--uop-color-border-strong); }
+.faq details:first-of-type { border-top: 1px solid var(--uop-color-border-strong); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: var(--uop-space-l); padding: var(--uop-space-l) var(--uop-space-2xs); font-weight: 700; font-size: 1.0625rem; min-height: 3.5rem; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary:hover { color: var(--uop-color-cta-accent); }
+.faq summary .icon { transition: transform .2s; }
+.faq details[open] summary .icon { transform: rotate(180deg); }
+.faq .faq__a { padding: 0 var(--uop-space-2xs) var(--uop-space-xl); max-width: 44em; }
+.faq .faq__a > * + * { margin-top: var(--uop-space-m); }
+@media (prefers-reduced-motion: reduce) { .faq summary .icon { transition: none; } }
+
+.profiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--uop-space-xl); }
+
+/* ---------- Zone F · Continue ---------- */
+.cards-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: var(--uop-space-xl); list-style: none; }
+.news-card { display: flex; flex-direction: column; gap: var(--uop-space-m); position: relative; }
+.news-card .ph { --ph-ratio: 3 / 2; }
+.news-card h3 { font-size: 1.1875rem; line-height: 1.3; }
+.news-card h3 a { color: var(--uop-color-text-primary); text-decoration: none; }
+.news-card h3 a::after { content: ""; position: absolute; inset: 0; }
+.news-card h3 a:visited { color: var(--uop-color-text-secondary); }
+.news-card:hover h3 a { text-decoration: underline; text-decoration-color: var(--uop-color-pink); text-decoration-thickness: 3px; }
+.news-card h3 a:focus-visible { outline: none; }
+.news-card:has(a:focus-visible) { outline: 3px solid var(--uop-color-focus-ring); outline-offset: 6px; border-radius: var(--uop-radius-l); }
+.tag { display: inline-block; align-self: flex-start; background: var(--uop-color-tint-purple); border-radius: var(--uop-radius-xs); padding: var(--uop-space-3xs) var(--uop-space-s); font-size: 0.75rem; font-weight: 750; }
+.tag--teal { background: var(--uop-color-tint-teal); }
+.tag--yellow { background: var(--uop-color-tint-yellow); }
+.tag--pink { background: var(--uop-color-tint-pink); }
+
+.events { list-style: none; display: grid; gap: var(--uop-space-m); }
+.event { display: grid; grid-template-columns: 5.5rem 1fr auto; gap: var(--uop-space-xl); align-items: center; padding: var(--uop-space-l); border-radius: var(--uop-radius-l); background: var(--uop-color-surface); border: 1px solid var(--uop-color-border-strong); }
+.event__date { display: grid; place-items: center; text-align: center; background: var(--uop-color-tint-pink); border-radius: var(--uop-radius-m); padding: var(--uop-space-m) var(--uop-space-s); line-height: 1; }
+.event__date b { font-size: 2rem; font-weight: 850; font-variation-settings: "wdth" 80; }
+.event__date span { font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; margin-top: var(--uop-space-2xs); }
+.event h3 { font-size: 1.125rem; }
+.event__meta { display: flex; flex-wrap: wrap; gap: var(--uop-space-2xs) var(--uop-space-l); margin-top: var(--uop-space-s); font-size: 0.875rem; color: var(--uop-color-text-secondary); }
+.event__meta span { display: inline-flex; gap: var(--uop-space-xs); align-items: center; }
+@media (max-width: 40rem) { .event { grid-template-columns: 4.5rem 1fr; } .event > :last-child { grid-column: 1 / -1; } }
+
+.newsletter { border-radius: var(--uop-radius-xl); background: var(--uop-color-tint-purple); padding: clamp(var(--uop-space-xl), 4vw, var(--uop-space-4xl)); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--uop-space-2xl); align-items: center; }
+@media (max-width: 48rem) { .newsletter { grid-template-columns: 1fr; } }
+
+/* ---------- Forms §12.5 (Border strong for inputs, §3.5) ---------- */
+.field { display: grid; gap: var(--uop-space-xs); }
+.field label { font-weight: 700; font-size: 0.9375rem; }
+.field .hint { font-size: 0.8125rem; color: var(--uop-color-text-secondary); }
+.input, .select {
+  min-height: 3rem; padding: var(--uop-space-m) var(--uop-space-l); border: 2px solid var(--uop-color-border-strong);
+  border-radius: var(--uop-radius-s); background: var(--uop-color-surface); width: 100%;
+}
+.input:hover, .select:hover { border-color: var(--uop-color-text-primary); }
+.input:focus-visible, .select:focus-visible { border-color: var(--uop-color-text-primary); }
+.input[aria-invalid="true"] { border-color: var(--uop-color-text-primary); border-width: 3px; }
+.input:disabled { background: var(--uop-color-surface-alt); cursor: not-allowed; }
+.error-msg { display: none; gap: var(--uop-space-s); align-items: center; background: var(--uop-color-tint-coral); border-left: 4px solid var(--uop-color-error); padding: var(--uop-space-s) var(--uop-space-m); font-size: 0.875rem; font-weight: 650; border-radius: 0 var(--uop-radius-s) var(--uop-radius-s) 0; }
+.error-msg.is-visible { display: flex; }
+.success-msg { display: none; gap: var(--uop-space-s); align-items: center; background: var(--uop-color-success); padding: var(--uop-space-m); font-weight: 700; border-radius: var(--uop-radius-m); }
+.success-msg.is-visible { display: flex; }
+.inline-form { display: flex; gap: var(--uop-space-s); align-items: flex-end; flex-wrap: wrap; }
+.inline-form .field { flex: 1 1 14rem; }
+
+/* ---------- Footer (Figma 272:8816, recoloured to new palette) ---------- */
+.site-footer { background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); margin-top: var(--uop-section); }
+.site-footer a { color: var(--uop-color-text-inverse); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; color: var(--uop-color-text-inverse); }
+.footer__grid { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: var(--uop-space-2xl); padding-block: var(--uop-space-5xl) var(--uop-space-3xl); }
+.footer__grid h2 { font-size: 1.125rem; margin-bottom: var(--uop-space-l); font-weight: 700; }
+.footer__grid ul { list-style: none; display: grid; gap: var(--uop-space-xs); }
+.footer__grid li a { display: inline-block; padding: var(--uop-space-2xs) 0; }
+.footer__contact { display: grid; gap: var(--uop-space-l); font-size: 0.9375rem; }
+.footer__contact p { display: flex; gap: var(--uop-space-m); }
+.footer__logo .logo, .footer__logo .logo:hover { color: var(--uop-color-text-inverse); }
+.footer__grid ul.socials { display: flex; list-style: none; gap: var(--uop-space-s); flex-wrap: wrap; }
+.socials a { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); font-size: 0.75rem; font-weight: 800; }
+.socials a:hover { background: var(--uop-color-surface); color: var(--uop-color-text-primary); text-decoration: none; }
+.pill-link { display: inline-block; border-radius: var(--uop-radius-pill); background: var(--uop-color-surface); color: var(--uop-color-text-primary) !important; padding: var(--uop-space-2xs) var(--uop-space-m) !important; font-weight: 700; }
+.footer__legal { border-top: 1px solid rgba(255,255,255,.25); padding-block: var(--uop-space-xl); display: flex; flex-wrap: wrap; gap: var(--uop-space-m) var(--uop-space-2xl); font-size: 0.875rem; }
+@media (max-width: 60rem) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 36rem) { .footer__grid { grid-template-columns: 1fr; } }
+
+/* ---------- Prototype toast ---------- */
+.toast { position: fixed; left: 50%; bottom: var(--uop-space-xl); transform: translate(-50%, 150%); z-index: 200; background: var(--uop-color-surface-inverse); color: var(--uop-color-text-inverse); padding: var(--uop-space-m) var(--uop-space-xl); border-radius: var(--uop-radius-pill); font-weight: 650; box-shadow: 0 10px 30px rgba(30,27,75,.35); max-width: calc(100% - 2rem); text-align: center; }
+.toast:not(.is-visible) { visibility: hidden; }
+.toast.is-visible { transform: translate(-50%, 0); visibility: visible; }
+@media (prefers-reduced-motion: no-preference) { .toast { transition: transform .25s ease; } }
+
+/* Grids used across sets */
+.two-col { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(var(--uop-space-2xl), 4vw, var(--uop-space-5xl)); align-items: start; }
+@media (max-width: 56rem) { .two-col { grid-template-columns: 1fr; } }
+.mt-2xl { margin-top: var(--uop-space-2xl); }
+.mt-4xl { margin-top: var(--uop-space-4xl); }
+
+/* Standard hero: no card overlap on small screens (it covered the CTA) */
+@media (max-width: 52rem) { .hero + .ask, .hero ~ .ask { margin-top: calc(-1 * var(--uop-space-xl)); } }
+
+
+/* ---------- Sample generative answer (AIP-6 pattern) ---------- */
+.ask__quota { margin-top: var(--uop-space-s); padding-left: var(--uop-space-l); font-size: .8125rem; color: var(--uop-color-text-secondary); }
+.ask__quota a { font-weight: 700; }
+.ask__out:empty { display: none; }
+.ask__out { margin-top: var(--uop-space-xl); }
+.ai { position: relative; border-radius: var(--uop-radius-l); background: var(--uop-color-tint-purple); border: 1px solid #CBA6FB; padding: var(--uop-space-xl); }
+.ai__head { display: flex; align-items: center; gap: var(--uop-space-m); margin-bottom: var(--uop-space-m); }
+.ai__head h3 { font-size: 1.0625rem; }
+.ai__badge { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--uop-color-cta-accent); color: var(--uop-color-text-inverse); flex: none; }
+.ai__badge .icon { width: 1rem; height: 1rem; vertical-align: 0; }
+.ai__sample { font-size: .75rem; font-weight: 750; background: var(--uop-color-warning); border-radius: var(--uop-radius-xs); padding: 1px var(--uop-space-s); }
+.ai__hide { margin-left: auto; min-height: 2.25rem; }
+.ai__body p { max-width: 60em; }
+.ai__body a { color: var(--uop-color-text-primary); font-weight: 650; }
+.ai__src-h { font-size: .875rem; margin: var(--uop-space-l) 0 var(--uop-space-xs); }
+.ai__src { list-style: none; display: grid; gap: var(--uop-space-2xs); font-size: .875rem; }
+.ai__src a { font-weight: 650; color: var(--uop-color-text-primary); }
+.ai__src li:target { background: var(--uop-color-surface); border-radius: var(--uop-radius-xs); }
+.ai__foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--uop-space-s) var(--uop-space-m); margin-top: var(--uop-space-l); padding-top: var(--uop-space-m); border-top: 1px solid #CBA6FB; font-size: .875rem; }
+.ai__foot .chip { min-height: 2.25rem; padding-block: var(--uop-space-2xs); }
+.ai__report { min-height: 2.25rem; font-size: .875rem; }
+.ai__check { margin-left: auto; color: var(--uop-color-text-secondary); font-size: .8125rem; }
+.ai__thanks:empty { display: none; }
+.ai__thanks { margin-top: var(--uop-space-s); font-weight: 650; }
+.ai--loading { min-height: 9rem; }
+.ai__shim { display: block; height: .85rem; border-radius: var(--uop-radius-xs); margin-top: var(--uop-space-m); background: linear-gradient(90deg, #E0CCFC 0%, #F4ECFE 50%, #E0CCFC 100%); background-size: 200% 100%; }
+.ai__shim--short { width: 55%; }
+@media (prefers-reduced-motion: no-preference) { .ai__shim { animation: shimmer 1.2s linear infinite; } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.ai--empty { background: var(--uop-color-tint-yellow); border-color: var(--uop-color-warning); }
+.ai__nudge { display: flex; align-items: center; gap: var(--uop-space-s); font-size: .9375rem; }
+.ask__results { margin-top: var(--uop-space-xl); border-top: 1px solid var(--uop-color-surface-alt); padding-top: var(--uop-space-l); }
+.ask__results-h { font-size: 1rem; margin-bottom: var(--uop-space-m); }
+.sr-list { list-style: none; display: grid; gap: var(--uop-space-xl); margin-bottom: var(--uop-space-xl); }
+.sr { display: grid; gap: var(--uop-space-2xs); justify-items: start; }
+.sr__title { font-size: 1.125rem; font-weight: 750; }
+.sr__url { font-size: .8125rem; color: var(--uop-color-text-secondary); }
+.sr__line { width: min(36rem, 100%); height: .6rem; border-radius: var(--uop-radius-xs); background: #ECECF1; }
+.sr__line--short { width: min(22rem, 70%); }
+@media (max-width: 36rem) { .ai__check { margin-left: 0; width: 100%; } .ai { padding: var(--uop-space-l); } }
+
+
+/* ================= Footers (UoP Dark purple #3C023C) ================= */
+:root { --uop-color-footer: #3C023C; }
+.ft-back { display: flex; justify-content: center; margin-top: var(--uop-section); }
+.ft-back__btn { display: inline-flex; align-items: center; gap: var(--uop-space-s); background: var(--uop-color-footer); color: #fff !important; text-decoration: none; font-weight: 700; font-size: .875rem; padding: var(--uop-space-s) var(--uop-space-l); border-radius: var(--uop-radius-m) var(--uop-radius-m) 0 0; min-height: 2.75rem; }
+.ft-back__btn:hover { text-decoration: underline; }
+.ft-back__btn .icon { border: 1.5px solid currentColor; border-radius: var(--uop-radius-xs); }
+.ft { position: relative; overflow: hidden; isolation: isolate; background: var(--uop-color-footer); color: #fff; font-size: .9375rem; }
+.ft a { color: #fff; text-decoration: none; }
+.ft a:visited { color: #fff; }
+.ft a:hover { text-decoration: underline; text-underline-offset: .2em; }
+.ft :focus-visible { outline-color: #fff; } /* white ring: 15.9:1 on #3C023C (pink ring would be 3.0:1) */
+.ft h2 { font-size: 1.125rem; font-weight: 700; }
+.ft ul { list-style: none; }
+.ft-logo { display: inline-flex; color: #fff; }
+.ft-logo .logo-svg { color: #fff; width: 160px; height: 57px; }
+.ft-mini-h { font-size: .875rem !important; margin-bottom: var(--uop-space-xs); opacity: .9; }
+.ft-contact { display: grid; gap: var(--uop-space-l); margin-block: var(--uop-space-xl); }
+.ft-contact p { display: flex; gap: var(--uop-space-m); align-items: flex-start; margin-bottom: var(--uop-space-xs); }
+.ft-contact .icon { flex: none; margin-top: .15em; }
+.ft-social { display: flex; gap: var(--uop-space-s); flex-wrap: wrap; }
+.ft-social a { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%; }
+.ft-social a:hover { background: rgba(255,255,255,.15); }
+.soc { width: 1.6rem; height: 1.6rem; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Column / accordion */
+.ft-col summary { list-style: none; display: flex; justify-content: space-between; align-items: center; cursor: default; padding-bottom: var(--uop-space-m); }
+.ft-col summary::-webkit-details-marker { display: none; }
+.ft-col summary .icon { display: none; }
+.ft-col ul { display: grid; gap: var(--uop-space-2xs); }
+.ft-col li a { display: inline-block; padding-block: var(--uop-space-2xs); }
+
+.ft-grid4 { display: grid; grid-template-columns: 1.15fr 1fr 1fr 1fr; padding-block: var(--uop-space-3xl); }
+.ft-grid4 > * { padding-inline: var(--uop-space-xl); }
+.ft-grid4 > * + * { border-left: 1px solid rgba(255,255,255,.55); }
+.ft-grid4 > :first-child { padding-left: 0; }
+
+.ft-legal { border-top: 1px solid rgba(255,255,255,.25); font-size: .875rem; }
+.ft-legal .container { display: flex; flex-wrap: wrap; align-items: center; gap: var(--uop-space-m) var(--uop-space-2xl); padding-block: var(--uop-space-l); }
+.ft-legal ul { display: flex; flex-wrap: wrap; gap: var(--uop-space-xs) var(--uop-space-2xl); }
+.ft-legal__sep { width: 1px; height: 1.5rem; background: rgba(255,255,255,.6); }
+
+/* F2 CTA-led */
+.ft-cta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: var(--uop-space-2xl); padding-block: var(--uop-space-5xl) var(--uop-space-3xl); }
+.ft-cta__text { max-width: 40rem; display: grid; gap: var(--uop-space-l); }
+.ft-cta__h { font-size: clamp(2rem, 1.2rem + 3vw, 3.5rem); }
+.ft-cta__btns { display: flex; gap: var(--uop-space-m); flex-wrap: wrap; }
+.ft .btn--secondary { --btn-fg: #fff; --btn-bd: #fff; }
+.ft .btn--secondary:hover { --btn-bg: #fff; --btn-fg: var(--uop-color-footer); }
+.ft .btn--white, .ft .btn--white:visited { color: var(--uop-color-text-primary); }
+.ft-rule { border-top: 1px solid rgba(255,255,255,.3); }
+.ft-grid5 { display: grid; grid-template-columns: repeat(4, 1fr) 1.3fr; gap: var(--uop-space-2xl); padding-block: var(--uop-space-3xl); }
+.ft-brand--compact .ft-contact { margin-block: var(--uop-space-l); }
+
+/* F3 campuses + knot */
+.ft-knot { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; }
+.ft-knot path { fill: #5A2A5A; } /* #D1D1D1 soft-light over #3C023C, tone-on-tone as the hi-fi hero */
+.ft-campus { display: grid; grid-template-columns: 1fr 2fr; gap: var(--uop-space-3xl); padding-block: var(--uop-space-4xl); }
+.ft-tag { font-size: 1.25rem; font-weight: 750; margin-block: var(--uop-space-l); font-variation-settings: "wdth" 85; }
+.ft-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--uop-space-l); }
+.ft-card { background: rgba(30,0,30,.55); border: 1px solid rgba(255,255,255,.3); border-radius: var(--uop-radius-xl); padding: var(--uop-space-xl); display: grid; gap: var(--uop-space-m); align-content: start; }
+.ft-card h2 { font-size: 1.5rem; text-transform: uppercase; font-variation-settings: "wdth" 80; font-weight: 800; }
+.ft .btn-text, .ft .btn-text:visited { color: #fff; }
+.ft-pills { grid-column: 1 / -1; }
+.ft-pills h2 { margin-bottom: var(--uop-space-m); }
+.ft-pills ul { display: flex; flex-wrap: wrap; gap: var(--uop-space-s); }
+.ft-pills a { display: inline-flex; min-height: 2.5rem; align-items: center; padding: 0 var(--uop-space-l); border-radius: var(--uop-radius-pill); border: 1.5px solid #fff; font-weight: 700; font-size: .875rem; }
+.ft-pills a:hover { background: #fff; color: var(--uop-color-footer) !important; text-decoration: none; }
+
+/* F4 newsletter */
+.ft-news { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--uop-space-4xl); padding-block: var(--uop-space-4xl) var(--uop-space-2xl); }
+.ft-news__form { display: grid; gap: var(--uop-space-l); align-content: start; }
+.ft-news__h { font-size: clamp(2rem, 1.4rem + 2vw, 3rem); }
+.ft .input { border-color: #fff; }
+.ft label { color: #fff; }
+.ft .error-msg { color: var(--uop-color-text-primary); }
+.ft .success-msg { color: var(--uop-color-text-primary); }
+.ft-news__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--uop-space-2xl); }
+.ft-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--uop-space-xl); padding-block: var(--uop-space-xl); border-top: 1px solid rgba(255,255,255,.3); }
+.ft-contact--row { display: flex; gap: var(--uop-space-2xl); margin: 0; }
+.ft-contact--row .ft-mini-h { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.ft-contact--row .ft-contact__item { display: flex; gap: var(--uop-space-xl); flex-wrap: wrap; }
+
+/* F5 compact */
+.ft-compact { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--uop-space-xl); padding-block: var(--uop-space-2xl); }
+.ft-inline { display: flex; flex-wrap: wrap; gap: var(--uop-space-xs) var(--uop-space-xl); font-weight: 700; }
+.ft-inline a { display: inline-block; padding-block: var(--uop-space-xs); }
+
+@media (max-width: 60rem) {
+  .ft-grid4, .ft-grid5, .ft-campus, .ft-news { grid-template-columns: 1fr; }
+  .ft-grid4 > * { padding-inline: 0; border-left: 0 !important; }
+  .ft-news__cols { grid-template-columns: 1fr; gap: 0; }
+  .ft-cards { grid-template-columns: 1fr; }
+  /* Figma mobile: link columns become +/- accordions */
+  .ft-col { border-top: 1px solid rgba(255,255,255,.4); }
+  .ft-col:last-of-type { border-bottom: 1px solid rgba(255,255,255,.4); }
+  .ft-col summary { cursor: pointer; min-height: 3.25rem; padding: var(--uop-space-m) 0; }
+  .ft-col summary .icon { display: inline-block; transition: transform .2s; }
+  .ft-col[open] summary .icon { transform: rotate(180deg); }
+  .ft-col ul { padding-bottom: var(--uop-space-l); }
+  .ft-grid4 { gap: 0; } .ft-grid4 .ft-brand { padding-bottom: var(--uop-space-xl); }
+  .ft-grid5 { gap: 0; } .ft-grid5 .ft-brand { order: -1; padding-bottom: var(--uop-space-xl); }
+  .ft-legal__sep { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .ft-col summary .icon { transition: none; } }
+
+
+/* Placeholders: keep participants focused on the part being tested */
+.ph-hdr { background: var(--uop-color-surface); border-bottom: 1px solid var(--uop-color-surface-alt); }
+.ph-hdr__in, .ph-ftr__in { display: flex; flex-wrap: wrap; align-items: center; gap: var(--uop-space-xl); min-height: 5rem; padding-block: var(--uop-space-m); }
+.ph-note { display: flex; gap: var(--uop-space-s); align-items: center; font-size: .875rem; color: var(--uop-color-text-secondary); }
+.ph-bars { display: flex; gap: var(--uop-space-m); margin-left: auto; }
+.ph-bars span { width: 5rem; height: .75rem; border-radius: var(--uop-radius-pill); background: #ECECF1; }
+.ph-bars .w { width: 9rem; height: 2.25rem; }
+.ph-ftr { background: #3C023C; color: #fff; margin-top: var(--uop-section); }
+.ph-ftr__in { min-height: 12rem; padding-block: var(--uop-space-3xl); align-items: flex-start; }
+.ph-ftr .ph-note { color: #fff; }
+.ph-ftr .ph-bars { flex-direction: column; }
+.ph-ftr .ph-bars span { background: rgba(255,255,255,.2); width: 10rem; }
+.logo--inv, .logo--inv:visited, .logo--inv:hover { color: #fff; }
+@media (max-width: 48rem) { .ph-bars { display: none; } }
+
+</style>
+</head>
+<body id="top">
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+<symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+<symbol id="i-location" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+<symbol id="i-email" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
+<symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 5h16l-6 8v6l-4-2v-4z"/></symbol>
+<symbol id="i-food" viewBox="0 0 24 24"><path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M17 21V3c-2 1-3 4-3 8h3"/></symbol>
+<symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r=".8"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17v.5"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h14V10"/></symbol>
+<symbol id="i-door" viewBox="0 0 24 24"><path d="M6 21V4h12v17M3 21h18M14 12v.5"/></symbol>
+<symbol id="i-bus" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="13" rx="2"/><path d="M4 11h16M7 17v3M17 17v3"/></symbol>
+<symbol id="i-step" viewBox="0 0 24 24"><circle cx="10" cy="5" r="2"/><path d="M10 8v6h5l2 6M10 11H7"/><path d="M8 14a5 5 0 1 0 6 5"/></symbol>
+<symbol id="i-parking" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></symbol>
+</svg>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<symbol id="i-chevron-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
+<symbol id="i-location" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
+<symbol id="i-email" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+<symbol id="i-warning" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/></symbol>
+</svg>
+<header class="ph-hdr"><div class="container ph-hdr__in"><a class="logo" href="#" data-proto="University of Portsmouth home" aria-label="University of Portsmouth home"><svg class="logo-svg" viewBox="0 0 134 48" fill="currentColor" aria-hidden="true" focusable="false"><path transform="translate(0 0)" d="M24.7211 0 L0 0 L0 24.8238 C0 31.6823 5.53391 37.2369 12.3594 37.2369 L12.3594 12.4108 L24.7211 0 Z"/><path transform="translate(14.048 12.411)" d="M0 35.5431 L0 0 L10.6702 0 C17.498 0 23.0319 5.55923 23.0319 12.4131 C23.0319 19.2669 17.498 24.8262 10.6702 24.8262 L0 35.5408 L0 35.5431 Z"/><path transform="translate(16.438 2.405)" d="M8.27789 0 L0 8.31231 L8.27789 8.31 L8.27789 0 Z"/><path transform="translate(43.472 12.035)" d="M3.94184 9.73933 C1.3467 9.73933 0 8.1736 0 5.89556 L0 0 L1.8291 0 L1.8291 5.86868 C1.8291 7.23282 2.48347 8.1624 3.94407 8.1624 C5.40467 8.1624 6.0568 7.23058 6.0568 5.86868 L6.0568 0 L7.8859 0 L7.8859 5.89556 C7.8859 8.17584 6.5392 9.73933 3.94184 9.73933 Z"/><path transform="translate(52.86 12.033)" d="M6.15507 9.56461 L1.80007 2.99482 L1.80007 9.56461 L0 9.56461 L0 0 L1.943 0 L6.23993 6.47571 L6.23993 0 L8.04224 0 L8.04224 9.56461 L6.15507 9.56461 Z"/><path transform="translate(62.549 12.033)" d="M1.85813 0 L0 0 L0 9.56461 L1.85813 9.56461 L1.85813 0 Z"/><path transform="translate(65.441 12.033)" d="M5.34884 9.56461 L3.33437 9.56461 L0 0 L1.943 0 L4.38181 7.29777 L6.80944 0 L8.65194 0 L5.34884 9.56461 Z"/><path transform="translate(75.129 12.033)" d="M0 9.56461 L0 0 L7.1623 0 L7.1623 1.57917 L1.8291 1.57917 L1.8291 3.80568 L6.5258 3.80568 L6.5258 5.36917 L1.8291 5.36917 L1.8291 7.98768 L7.1623 7.98768 L7.1623 9.56461 L0 9.56461 Z"/><path transform="translate(83.683 12.033)" d="M4.2411 1.52541 L1.83133 1.52541 L1.83133 4.38583 L4.27013 4.38583 C5.3064 4.38583 5.9027 3.87288 5.9027 2.97018 C5.9027 2.19964 5.27736 1.52541 4.2411 1.52541 Z M5.74413 9.56461 L4.07136 5.94932 L1.84473 5.94932 L1.84473 9.56461 L0 9.56461 L0 0 L4.2411 0 C6.63746 0 7.72956 1.42909 7.72956 2.96794 C7.72956 4.2492 6.99256 5.25941 5.88706 5.65141 L7.72956 9.56237 L5.74413 9.56237 L5.74413 9.56461 Z"/><path transform="translate(91.998 11.857)" d="M7.23153 8.89038 C6.4655 9.61837 5.28853 9.91628 4.05573 9.91628 C2.99043 9.91628 1.87154 9.64525 1.04967 8.9307 C0.453369 8.41775 0 7.60913 0 6.70419 L1.87153 6.70419 C1.87153 7.17682 2.0971 7.59345 2.39637 7.87792 C2.82294 8.28335 3.50187 8.39087 4.08477 8.39087 C4.77934 8.39087 5.4471 8.25648 5.829 7.87792 C6.0568 7.64945 6.22653 7.41873 6.22653 6.96178 C6.22653 6.26067 5.65927 5.93588 5.03394 5.82836 C4.35277 5.70741 3.47507 5.68053 2.8073 5.57077 C1.41817 5.35573 0.254603 4.49111 0.254603 2.90074 C0.254603 2.14588 0.609704 1.51197 1.13454 1.01246 C1.80007 0.391992 2.9078 0 4.08477 0 C5.16347 0 6.21313 0.324794 6.8943 0.929582 C7.4906 1.46941 7.90153 2.17052 7.91493 2.9657 L6.0434 2.9657 C6.03 2.62747 5.84463 2.2646 5.60343 2.02268 C5.27737 1.69789 4.6096 1.50973 4.07137 1.50973 C3.5041 1.50973 2.85196 1.63069 2.44103 2.03612 C2.22663 2.25116 2.09933 2.49531 2.09933 2.84474 C2.09933 3.46521 2.5259 3.78776 3.11997 3.88408 C3.7587 3.97816 4.65203 4.04536 5.30417 4.126 C6.8072 4.32983 8.07127 5.25942 8.07127 6.89234 C8.07127 7.78384 7.72957 8.41775 7.23377 8.88814"/><path transform="translate(101.355 12.033)" d="M1.85813 0 L0 0 L0 9.56461 L1.85813 9.56461 L1.85813 0 Z"/><path transform="translate(104.478 12.033)" d="M4.80837 1.61949 L4.80837 9.56461 L2.97704 9.56461 L2.97704 1.61949 L0 1.61949 L0 0 L7.78763 0 L7.78763 1.61949 L4.80837 1.61949 Z"/><path transform="translate(113.058 12.033)" d="M5.33319 5.89556 L5.33319 9.56461 L3.49069 9.56461 L3.49069 5.89556 L0 0 L1.98543 0 L4.4689 4.12824 L6.95013 0 L8.85069 0 L5.33319 5.89556 Z"/><path transform="translate(43.758 24.371)" d="M3.88377 1.52541 L1.82017 1.52541 L1.82017 4.62551 L3.88377 4.62551 C5.10764 4.62551 5.6615 4.0028 5.6615 3.08218 C5.6615 2.16156 5.1054 1.52541 3.88377 1.52541 Z M3.95523 6.1554 L1.82017 6.1554 L1.82017 9.59373 L0 9.59373 L0 0 L3.95523 0 C6.27343 0 7.5107 1.23197 7.5107 3.07322 C7.5107 4.91446 6.27343 6.15764 3.95523 6.15764"/><path transform="translate(51.695 24.191)" d="M5.7754 2.2198 C5.37786 1.81436 4.76593 1.58365 4.18303 1.58365 C3.60013 1.58365 2.9882 1.81436 2.58843 2.2198 C1.89163 2.9097 1.8626 4.10136 1.8626 4.98166 C1.8626 5.86196 1.89163 7.03794 2.58843 7.72785 C2.98597 8.13328 3.5979 8.36399 4.18303 8.36399 C4.76817 8.36399 5.37786 8.13552 5.7754 7.72785 C6.4722 7.03794 6.50123 5.86196 6.50123 4.98166 C6.50123 4.10136 6.47443 2.9097 5.7754 2.2198 Z M7.08413 8.86351 C6.31587 9.59373 5.26397 9.9454 4.18303 9.9454 C3.1021 9.9454 2.04797 9.59373 1.2797 8.86351 C0.183132 7.82193 0 6.54963 0 4.97942 C0 3.40921 0.183132 2.12348 1.2797 1.0819 C2.04797 0.351673 3.09987 0 4.18303 0 C5.2662 0 6.31587 0.351673 7.08413 1.0819 C8.1807 2.12348 8.36384 3.40921 8.36384 4.97942 C8.36384 6.54963 8.17847 7.82193 7.08413 8.86351 Z"/><path transform="translate(61.124 24.369)" d="M4.2545 1.52765 L1.8358 1.52765 L1.8358 4.39703 L4.28353 4.39703 C5.32203 4.39703 5.92057 3.88408 5.92057 2.9769 C5.92057 2.20412 5.29523 1.52765 4.25673 1.52765 M5.762 9.59373 L4.08253 5.96724 L1.8492 5.96724 L1.8492 9.59373 L0 9.59373 L0 0 L4.25227 0 C6.65757 0 7.7519 1.43357 7.7519 2.9769 C7.7519 4.2604 7.01267 5.27734 5.9027 5.66933 L7.7519 9.59373 L5.75977 9.59373 L5.762 9.59373 Z"/><path transform="translate(69.403 24.369)" d="M4.82399 1.62397 L4.82399 9.59373 L2.9882 9.59373 L2.9882 1.62397 L0 1.62397 L0 0 L7.80997 0 L7.80997 1.62397 L4.82399 1.62397 Z"/><path transform="translate(77.483 24.189)" d="M7.25387 8.92174 C6.4856 9.65197 5.30416 9.94988 4.0669 9.94988 C2.99936 9.94988 1.876 9.67885 1.0519 8.95982 C0.453365 8.44687 0 7.63377 0 6.72659 L1.87823 6.72659 C1.87823 7.20146 2.10604 7.61809 2.40307 7.9048 C2.82964 8.31023 3.51303 8.41775 4.09593 8.41775 C4.79273 8.41775 5.46273 8.28335 5.84686 7.9048 C6.07467 7.67633 6.2444 7.44337 6.2444 6.98418 C6.2444 6.28083 5.67713 5.95604 5.04956 5.84628 C4.36616 5.72533 3.48623 5.69621 2.81623 5.58869 C1.42263 5.37365 0.254596 4.50679 0.254596 2.90746 C0.254596 2.15036 0.611933 1.51421 1.13677 1.0147 C1.80453 0.391992 2.9145 0 4.09593 0 C5.17687 0 6.22877 0.324794 6.91217 0.931822 C7.50847 1.47389 7.92164 2.17724 7.93727 2.9769 L6.05903 2.9769 C6.04563 2.63867 5.86027 2.27356 5.61907 2.0294 C5.29077 1.70461 4.623 1.51421 4.08253 1.51421 C3.51303 1.51421 2.85867 1.63741 2.4455 2.04284 C2.2311 2.26012 2.1038 2.50203 2.1038 2.8537 C2.1038 3.47641 2.53037 3.8012 3.1289 3.89528 C3.76764 3.98936 4.66543 4.0588 5.3198 4.13944 C6.8273 4.34327 8.0936 5.27734 8.0936 6.91474 C8.0936 7.80848 7.7519 8.44463 7.25387 8.91726"/><path transform="translate(86.87 24.369)" d="M8.35043 9.59373 L8.35043 2.74619 L5.73297 9.45933 L4.3818 9.45933 L1.77773 2.66555 L1.77773 9.59373 L0 9.59373 L0 0 L2.47453 0 L5.12103 6.8341 L7.78317 0 L10.1282 0 L10.1282 9.59373 L8.35043 9.59373 Z"/><path transform="translate(98.065 24.192)" d="M5.7754 2.2198 C5.37786 1.81436 4.76593 1.58365 4.18303 1.58365 C3.60013 1.58365 2.9882 1.81436 2.59067 2.2198 C1.89387 2.9097 1.86483 4.10136 1.86483 4.98166 C1.86483 5.86196 1.89387 7.03794 2.59067 7.72785 C2.9882 8.13328 3.60013 8.36399 4.18303 8.36399 C4.76593 8.36399 5.37786 8.13552 5.7754 7.72785 C6.4722 7.03794 6.50123 5.86196 6.50123 4.98166 C6.50123 4.10136 6.4722 2.9097 5.7754 2.2198 Z M7.08413 8.86351 C6.31587 9.59373 5.26173 9.9454 4.1808 9.9454 C3.09987 9.9454 2.04573 9.59373 1.2797 8.86351 C0.183129 7.82193 0 6.54963 0 4.97942 C0 3.40921 0.183129 2.12348 1.2797 1.0819 C2.04796 0.351673 3.09987 0 4.1808 0 C5.26173 0 6.31363 0.351673 7.08413 1.0819 C8.17847 2.12348 8.36383 3.40921 8.36383 4.97942 C8.36383 6.54963 8.17847 7.82193 7.08413 8.86351 Z"/><path transform="translate(107.566 24.369)" d="M3.95523 9.77069 C1.3534 9.77069 0 8.20048 0 5.91348 L0 0 L1.83579 0 L1.83579 5.8866 C1.83579 7.25298 2.49016 8.18704 3.95523 8.18704 C5.4203 8.18704 6.07466 7.25298 6.07466 5.8866 L6.07466 0 L7.91046 0 L7.91046 5.91348 C7.91046 8.20048 6.5593 9.77069 3.95523 9.77069 Z"/><path transform="translate(116.457 24.369)" d="M4.82176 1.62397 L4.82176 9.59373 L2.98597 9.59373 L2.98597 1.62397 L0 1.62397 L0 0 L7.80996 0 L7.80996 1.62397 L4.82176 1.62397 Z"/><path transform="translate(125.176 24.369)" d="M5.97417 9.59373 L5.97417 5.41173 L1.83581 5.41173 L1.83581 9.59373 L0 9.59373 L0 0 L1.83581 0 L1.83581 3.74744 L5.97417 3.74744 L5.97417 0 L7.80997 0 L7.80997 9.59373 L5.97417 9.59373 Z"/><path transform="translate(122.144 14.539)" d="M4.17634 1.60157 C3.88824 1.30813 3.44604 1.14238 3.02394 1.14238 C2.60184 1.14238 2.15963 1.30813 1.87153 1.60157 C1.3668 2.10108 1.34671 2.96122 1.34671 3.59737 C1.34671 4.23352 1.3668 5.0847 1.87153 5.58197 C2.15963 5.8754 2.60184 6.04116 3.02394 6.04116 C3.44604 6.04116 3.88824 5.8754 4.17634 5.58197 C4.68107 5.08246 4.70118 4.23352 4.70118 3.59737 C4.70118 2.96122 4.68107 2.10108 4.17634 1.60157 Z M5.12327 6.40403 C4.56717 6.93266 3.80561 7.18578 3.02394 7.18578 C2.24228 7.18578 1.4807 6.93042 0.924603 6.40403 C0.13177 5.65141 0 4.73079 0 3.59737 C0 2.46395 0.134003 1.53437 0.924603 0.781744 C1.4807 0.255354 2.24228 0 3.02394 0 C3.80561 0 4.56717 0.255354 5.12327 0.781744 C5.9161 1.53437 6.04787 2.46395 6.04787 3.59737 C6.04787 4.73079 5.91387 5.65141 5.12327 6.40403 Z"/><path transform="translate(128.959 14.664)" d="M1.3266 1.14238 L1.3266 3.00154 L4.64087 3.00154 L4.64087 4.14616 L1.3266 4.14616 L1.3266 6.93266 L0 6.93266 L0 0 L5.04064 0 L5.04064 1.14238 L1.3266 1.14238 Z"/></svg></a><p class="ph-note"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><span>Header placeholder — not part of this test</span></p><div class="ph-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span class="w"></span></div></div></header>
+<main id="main" tabindex="-1">
+
+<!-- A · SIGNAL — live_status_band, above the hero -->
+<div class="band band--inverse on-dark" role="region" aria-label="Happening now">
+  <div class="container" style="justify-content:space-between">
+    <p class="band__body" style="flex-wrap:wrap;gap:var(--uop-space-xs) var(--uop-space-2xl)">
+      <span><span class="status-dot">Happening now</span><br><strong id="now-t">Campus tour</strong> <span id="now-p">Guildhall Square</span></span>
+      <span><strong>Next up</strong><br><strong id="next-t">10:30 Accommodation tour</strong>, <span id="next-p">Rees Hall</span></span>
+    </p>
+    <a class="btn btn--white btn--sm" href="#sched-h">Today's full schedule</a>
+  </div>
+</div>
+
+<!-- B · HERO — hero_takeover, short: the schedule matters more -->
+<section class="takeover takeover--short on-dark" aria-labelledby="hero-h">
+  <svg class="takeover__knot" viewBox="0 0 1400 533" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><path fill="#D1D1D1" transform="matrix(0 -1 1 0 -12 652)" d="M812.849 122.251 L812.849 11.7509 C698.975 17.3249 587.284 63.6493 492.602 126.093 C466.335 78.94 432.842 36.3064 391.447 1.43163 C390.92 0.979685 390.318 0.451942 389.791 0 L0 0 L0 106.132 C80.5323 31.1846 197.342 2.93792 295.862 66.2097 C343.579 96.8664 379.029 141.232 404.393 191.699 C347.418 238.852 294.809 292.407 248.822 350.783 C162.043 304.986 77.6723 255.874 0 198.628 L0 329.616 C60.4369 370.14 123.132 406.973 185.676 440.643 C143.904 508.058 111.165 580.293 89.865 655.542 C56.4479 630.233 26.1918 601.158 0 568.166 L0 724.387 C21.1491 741.41 43.5025 757.153 66.759 771.615 C57.5016 852.965 62.3185 936.574 84.6718 1020.48 C126.293 1176.86 232.415 1312.29 380.685 1379.85 C441.799 1407.65 508.708 1424.07 575.543 1426.48 C579.757 1433.56 584.047 1440.64 588.413 1447.57 C588.714 1448.02 589.015 1448.55 589.316 1449 L722.533 1449 C722.157 1448.55 721.856 1448.02 721.479 1447.57 C713.501 1436.65 705.674 1425.5 698.147 1414.2 C738.263 1404.33 776.949 1388.52 812.925 1365.99 L812.925 1225.74 C774.992 1264.01 727.801 1292.78 674.891 1306.86 C663.15 1310.03 651.258 1312.44 639.366 1314.17 C577.274 1192.9 540.319 1058.75 535.276 921.51 C534.975 913.902 534.975 906.294 534.825 898.686 C558.232 898.988 581.413 898.535 604.293 897.255 C674.063 893.263 745.112 881.663 813 860.647 L813 660.362 C775.142 631.363 735.027 605.301 695.212 581.8 C653.14 556.943 609.788 533.442 565.683 510.468 C568.016 469.492 568.769 428.516 566.21 387.39 C562.898 334.136 553.264 279.978 536.706 228.155 C580.661 197.951 627.475 172.491 676.772 153.736 C719.598 137.466 766.412 125.49 813 122.251 L812.849 122.251 Z M443.078 302.726 C451.508 340.538 456.024 378.878 457.228 415.334 C457.679 428.893 457.679 442.376 457.529 455.934 C421.176 437.932 384.598 419.93 348.171 401.701 C377.298 367.203 408.984 333.835 443.078 302.726 Z M282.315 490.809 C338.386 519.055 394.834 546.473 450.906 574.795 C444.433 644.695 434.95 714.444 429.305 784.42 C344.708 774.101 261.391 751.278 186.654 714.821 C204.567 635.355 238.21 559.655 282.39 490.884 L282.315 490.809 Z M317.087 1206.84 C211.943 1110.04 168.516 965.95 172.429 825.923 C252.134 859.442 338.386 880.985 424.563 891.38 C424.563 894.694 424.563 898.008 424.563 901.322 C426.219 1041.57 458.357 1181 515.331 1309.73 C441.648 1294.21 371.803 1257.15 317.087 1206.76 L317.087 1206.84 Z M555.071 628.952 C596.541 651.323 637.485 674.673 677.45 699.606 C706.351 717.608 735.779 738.021 763.552 760.694 C755.423 763.029 747.295 765.213 739.166 767.247 C676.321 782.688 608.057 790.822 538.513 790.898 C542.577 736.815 549.2 682.885 555.071 628.878 L555.071 628.952 Z"/></svg><svg class="takeover__waves" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 45C240 -5 480 75 720 45S1200 -45 1440 5V120H0Z" fill="#00C2A8"/>
+  <path d="M0 85C260 45 520 110 760 85S1200 25 1440 60V120H0Z" fill="#00A8FF"/>
+</svg>
+  <div class="container"><div class="takeover__text">
+    <h1 id="hero-h" class="display h1">Welcome to your Open Day</h1>
+    <p class="lead">Find your talks, tours and the nearest coffee. Student ambassadors in pink T-shirts can help with anything.</p>
+    <div class="btn-row"><a class="btn" href="#sched-h">See today's schedule</a></div>
+  </div></div>
+</section>
+
+<!-- C · ASK — primed for on-campus wayfinding -->
+<section id="ask" class="ask" aria-labelledby="ask-h">
+  <div class="container"><div class="ask__card">
+    <form id="ask-form" role="search" novalidate>
+      <div class="ask__top">
+        <div><h2 id="ask-h" class="display h4">Ask where something is</h2></div>
+        <fieldset class="segmented">
+          <legend>How do you want to look?</legend>
+          <input type="radio" id="mode-search" name="ask-mode" value="search">
+          <label for="mode-search"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"/></svg> Search</label>
+          <input type="radio" id="mode-ask" name="ask-mode" value="ask" checked>
+          <label for="mode-ask"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-sparkle"/></svg> Ask AI</label>
+        </fieldset>
+      </div>
+      <div class="ask__field">
+        <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-search"/></svg>
+        <label for="ask-input" class="visually-hidden">Search or ask a question</label>
+        <input id="ask-input" name="q" type="search" autocomplete="off" data-ph-search="Search the schedule and campus" data-ph-ask="Ask where something is, or search the schedule" placeholder="Search the schedule and campus">
+        <button class="btn btn--accent" type="submit"><span class="label">Search</span></button>
+      </div>
+      <p class="ask__quota"><span data-quota>5</span> AI answers left today. <a href="#" data-proto="Log in for more AI answers">Log in for more.</a></p>
+      <div class="ask__chips"><span id="chips-label">Try:</span><button type="button" class="chip" aria-pressed="false">Where is the Eldon Building?</button><button type="button" class="chip" aria-pressed="false">What time is the psychology talk?</button><button type="button" class="chip" aria-pressed="false">Where can I get food?</button><button type="button" class="chip" aria-pressed="false">Where are the accommodation tours?</button></div>
+      
+      <div id="ask-out" class="ask__out" aria-live="polite"></div>
+    </form>
+  </div></div>
+</section>
+
+<!-- D · ACT — schedule finder + campus map + quick links -->
+<section class="section" aria-labelledby="sched-h">
+  <div class="container">
+    <div class="section-head"><h2 id="sched-h" class="display h2">Find a talk, tour or subject stand</h2></div>
+    <div class="inline-form" role="group" aria-label="Filter the schedule" style="margin-bottom:var(--uop-space-xl)">
+      <div class="field"><label for="f-time">When</label><select id="f-time" class="select"><option value="">All day</option><option value="now">From now on</option><option value="am">Morning</option><option value="pm">Afternoon</option></select></div>
+      <div class="field"><label for="f-building">Building</label><select id="f-building" class="select"><option value="">All buildings</option><option>Eldon Building</option><option>Future Technology Centre</option><option>Guildhall</option><option>Guildhall Square</option><option>James Watson Building</option><option>King Henry Building</option><option>Rees Hall</option><option>Richmond Building</option><option>St George's Building</option></select></div>
+      <div class="field"><label for="f-subject">Type</label><select id="f-subject" class="select"><option value="">Everything</option><option>Main talks</option><option>Subject talks</option><option>Tours</option></select></div>
+    </div>
+    <p id="sched-count" role="status" class="small muted" style="margin-bottom:var(--uop-space-m)"></p>
+    <ul id="sched" class="events"></ul>
+    <div class="btn-row mt-2xl"><a class="btn btn--secondary" href="#" data-proto="Download the full schedule">Full schedule</a></div>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="map-h">
+  <div class="container two-col">
+    <div>
+      <h2 id="map-h" class="display h3" style="margin-bottom:var(--uop-space-xl)">Campus map</h2>
+      <div class="ph ph--blue ph--wide" role="img" aria-label="Placeholder: campus map with a pin for each Open Day venue" style="padding:0">
+        <svg viewBox="0 0 640 360" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%">
+          <rect width="640" height="360" fill="#D9F2FF"/>
+          <path d="M0 300c120-30 220 20 340-10s200-40 300-20v90H0z" fill="#A6E1FF"/>
+          <g fill="#fff" stroke="#83829C" stroke-width="2">
+            <rect x="60" y="60" width="120" height="70" rx="8"/><rect x="230" y="40" width="150" height="90" rx="8"/>
+            <rect x="430" y="70" width="140" height="70" rx="8"/><rect x="90" y="170" width="110" height="80" rx="8"/>
+            <rect x="260" y="170" width="120" height="70" rx="8"/><rect x="430" y="180" width="120" height="70" rx="8"/>
+          </g>
+          <g font-family="Encode Sans, sans-serif" font-size="13" font-weight="700" fill="#1E1B4B">
+            <text x="72" y="100">Guildhall</text><text x="242" y="90">Eldon Building</text><text x="442" y="110">Future Tech Centre</text>
+            <text x="102" y="215">Rees Hall</text><text x="272" y="210">Richmond</text><text x="442" y="220">King Henry</text>
+          </g>
+          <g fill="#D90D69"><circle cx="160" cy="70" r="9"/><circle cx="360" cy="52" r="9"/><circle cx="550" cy="82" r="9"/><circle cx="180" cy="182" r="9"/></g>
+        </svg>
+        <span class="ph__label" style="position:absolute;left:1rem;bottom:1rem"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg> Map placeholder</span>
+      </div>
+    </div>
+    <div>
+      <h3 class="h4" style="margin-bottom:var(--uop-space-l)">Getting around</h3>
+      <ul class="quick-links" style="grid-template-columns:1fr 1fr">
+        <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-parking"/></svg>Parking</a></li>
+        <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-bus"/></svg>Shuttle bus</a></li>
+        <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-step"/></svg>Step-free routes</a></li>
+        <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-help"/></svg>Help point</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="ql-h">
+  <div class="container">
+    <h2 id="ql-h" class="display h3" style="margin-bottom:var(--uop-space-xl)">On the day</h2>
+    <ul class="quick-links">
+      <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-food"/></svg>Food and drink</a></li>
+      <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-door"/></svg>Toilets</a></li>
+      <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-user"/></svg>Ask a student</a></li>
+      <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-wifi"/></svg>Wifi</a></li>
+      <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-home"/></svg>Accommodation tours</a></li>
+      <li><a href="#"><svg class="icon icon--lg" aria-hidden="true" focusable="false"><use href="#i-help"/></svg>Help point</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- E · PROVE — promo is the only conversion ask on the page -->
+<section class="section" aria-labelledby="promo-h">
+  <div class="container promo">
+    <div class="ph ph--yellow wave-left" role="img" aria-label="Placeholder image: visitors chatting with a student ambassador"><svg class="ph__knot" viewBox="0 0 352 280" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><path fill="#D1D1D1" transform="matrix(-0.6 0 0 0.6 520 -170)" d="M812.849 122.251 L812.849 11.7509 C698.975 17.3249 587.284 63.6493 492.602 126.093 C466.335 78.94 432.842 36.3064 391.447 1.43163 C390.92 0.979685 390.318 0.451942 389.791 0 L0 0 L0 106.132 C80.5323 31.1846 197.342 2.93792 295.862 66.2097 C343.579 96.8664 379.029 141.232 404.393 191.699 C347.418 238.852 294.809 292.407 248.822 350.783 C162.043 304.986 77.6723 255.874 0 198.628 L0 329.616 C60.4369 370.14 123.132 406.973 185.676 440.643 C143.904 508.058 111.165 580.293 89.865 655.542 C56.4479 630.233 26.1918 601.158 0 568.166 L0 724.387 C21.1491 741.41 43.5025 757.153 66.759 771.615 C57.5016 852.965 62.3185 936.574 84.6718 1020.48 C126.293 1176.86 232.415 1312.29 380.685 1379.85 C441.799 1407.65 508.708 1424.07 575.543 1426.48 C579.757 1433.56 584.047 1440.64 588.413 1447.57 C588.714 1448.02 589.015 1448.55 589.316 1449 L722.533 1449 C722.157 1448.55 721.856 1448.02 721.479 1447.57 C713.501 1436.65 705.674 1425.5 698.147 1414.2 C738.263 1404.33 776.949 1388.52 812.925 1365.99 L812.925 1225.74 C774.992 1264.01 727.801 1292.78 674.891 1306.86 C663.15 1310.03 651.258 1312.44 639.366 1314.17 C577.274 1192.9 540.319 1058.75 535.276 921.51 C534.975 913.902 534.975 906.294 534.825 898.686 C558.232 898.988 581.413 898.535 604.293 897.255 C674.063 893.263 745.112 881.663 813 860.647 L813 660.362 C775.142 631.363 735.027 605.301 695.212 581.8 C653.14 556.943 609.788 533.442 565.683 510.468 C568.016 469.492 568.769 428.516 566.21 387.39 C562.898 334.136 553.264 279.978 536.706 228.155 C580.661 197.951 627.475 172.491 676.772 153.736 C719.598 137.466 766.412 125.49 813 122.251 L812.849 122.251 Z M443.078 302.726 C451.508 340.538 456.024 378.878 457.228 415.334 C457.679 428.893 457.679 442.376 457.529 455.934 C421.176 437.932 384.598 419.93 348.171 401.701 C377.298 367.203 408.984 333.835 443.078 302.726 Z M282.315 490.809 C338.386 519.055 394.834 546.473 450.906 574.795 C444.433 644.695 434.95 714.444 429.305 784.42 C344.708 774.101 261.391 751.278 186.654 714.821 C204.567 635.355 238.21 559.655 282.39 490.884 L282.315 490.809 Z M317.087 1206.84 C211.943 1110.04 168.516 965.95 172.429 825.923 C252.134 859.442 338.386 880.985 424.563 891.38 C424.563 894.694 424.563 898.008 424.563 901.322 C426.219 1041.57 458.357 1181 515.331 1309.73 C441.648 1294.21 371.803 1257.15 317.087 1206.76 L317.087 1206.84 Z M555.071 628.952 C596.541 651.323 637.485 674.673 677.45 699.606 C706.351 717.608 735.779 738.021 763.552 760.694 C755.423 763.029 747.295 765.213 739.166 767.247 C676.321 782.688 608.057 790.822 538.513 790.898 C542.577 736.815 549.2 682.885 555.071 628.878 L555.071 628.952 Z"/></svg><span class="ph__label" aria-hidden="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg> Photo: visitors chatting with a student ambassador</span></div>
+    <div class="promo__text">
+      <h2 id="promo-h" class="display h2">Enjoyed today? Here's what's next</h2>
+      <p class="lead">Save the courses you liked, see the entry requirements, and find out how to apply. Takes two minutes.</p>
+      <div class="btn-row"><a class="btn" href="#">Plan your next steps</a></div>
+    </div>
+  </div>
+</section>
+<section class="section" aria-labelledby="faq-h">
+  <div class="container">
+    <div class="section-head"><h2 id="faq-h" class="display h3">On-the-day questions</h2></div>
+    <div class="faq"><details><summary>Where do I register when I arrive?<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"/></svg></summary><div class="faq__a"><p>Head to the welcome tent in Guildhall Square. If you booked online, show your confirmation email on your phone.</p></div></details><details><summary>Can I go to talks I didn't book?<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"/></svg></summary><div class="faq__a"><p>Yes, if there's space. Subject talks fill up, so arrive ten minutes early.</p></div></details><details><summary>Is there somewhere to leave bags?<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"/></svg></summary><div class="faq__a"><p>There's a free bag drop at the welcome tent until 4pm.</p></div></details><details><summary>Where can I park?<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"/></svg></summary><div class="faq__a"><p>Use the visitor car parks shown on the campus map. Spaces are limited, so the shuttle bus from the park and ride is often quicker.</p></div></details><details><summary>I've lost someone in my group. What should I do?<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-down"/></svg></summary><div class="faq__a"><p>Go to the nearest help point or ask any student ambassador. They can radio the welcome team.</p></div></details></div>
+  </div>
+</section>
+<!-- PROTO: venue names, rooms and on-the-day details are placeholders — confirm with the Events team -->
+<!-- F · CONTINUE — suppressed: today the site is a wayfinding tool -->
+
+</main>
+<footer class="ph-ftr"><div class="container ph-ftr__in"><a class="logo logo--inv" href="#" data-proto="University of Portsmouth home" aria-label="University of Portsmouth home"><svg class="logo-svg" viewBox="0 0 134 48" fill="currentColor" aria-hidden="true" focusable="false"><path transform="translate(0 0)" d="M24.7211 0 L0 0 L0 24.8238 C0 31.6823 5.53391 37.2369 12.3594 37.2369 L12.3594 12.4108 L24.7211 0 Z"/><path transform="translate(14.048 12.411)" d="M0 35.5431 L0 0 L10.6702 0 C17.498 0 23.0319 5.55923 23.0319 12.4131 C23.0319 19.2669 17.498 24.8262 10.6702 24.8262 L0 35.5408 L0 35.5431 Z"/><path transform="translate(16.438 2.405)" d="M8.27789 0 L0 8.31231 L8.27789 8.31 L8.27789 0 Z"/><path transform="translate(43.472 12.035)" d="M3.94184 9.73933 C1.3467 9.73933 0 8.1736 0 5.89556 L0 0 L1.8291 0 L1.8291 5.86868 C1.8291 7.23282 2.48347 8.1624 3.94407 8.1624 C5.40467 8.1624 6.0568 7.23058 6.0568 5.86868 L6.0568 0 L7.8859 0 L7.8859 5.89556 C7.8859 8.17584 6.5392 9.73933 3.94184 9.73933 Z"/><path transform="translate(52.86 12.033)" d="M6.15507 9.56461 L1.80007 2.99482 L1.80007 9.56461 L0 9.56461 L0 0 L1.943 0 L6.23993 6.47571 L6.23993 0 L8.04224 0 L8.04224 9.56461 L6.15507 9.56461 Z"/><path transform="translate(62.549 12.033)" d="M1.85813 0 L0 0 L0 9.56461 L1.85813 9.56461 L1.85813 0 Z"/><path transform="translate(65.441 12.033)" d="M5.34884 9.56461 L3.33437 9.56461 L0 0 L1.943 0 L4.38181 7.29777 L6.80944 0 L8.65194 0 L5.34884 9.56461 Z"/><path transform="translate(75.129 12.033)" d="M0 9.56461 L0 0 L7.1623 0 L7.1623 1.57917 L1.8291 1.57917 L1.8291 3.80568 L6.5258 3.80568 L6.5258 5.36917 L1.8291 5.36917 L1.8291 7.98768 L7.1623 7.98768 L7.1623 9.56461 L0 9.56461 Z"/><path transform="translate(83.683 12.033)" d="M4.2411 1.52541 L1.83133 1.52541 L1.83133 4.38583 L4.27013 4.38583 C5.3064 4.38583 5.9027 3.87288 5.9027 2.97018 C5.9027 2.19964 5.27736 1.52541 4.2411 1.52541 Z M5.74413 9.56461 L4.07136 5.94932 L1.84473 5.94932 L1.84473 9.56461 L0 9.56461 L0 0 L4.2411 0 C6.63746 0 7.72956 1.42909 7.72956 2.96794 C7.72956 4.2492 6.99256 5.25941 5.88706 5.65141 L7.72956 9.56237 L5.74413 9.56237 L5.74413 9.56461 Z"/><path transform="translate(91.998 11.857)" d="M7.23153 8.89038 C6.4655 9.61837 5.28853 9.91628 4.05573 9.91628 C2.99043 9.91628 1.87154 9.64525 1.04967 8.9307 C0.453369 8.41775 0 7.60913 0 6.70419 L1.87153 6.70419 C1.87153 7.17682 2.0971 7.59345 2.39637 7.87792 C2.82294 8.28335 3.50187 8.39087 4.08477 8.39087 C4.77934 8.39087 5.4471 8.25648 5.829 7.87792 C6.0568 7.64945 6.22653 7.41873 6.22653 6.96178 C6.22653 6.26067 5.65927 5.93588 5.03394 5.82836 C4.35277 5.70741 3.47507 5.68053 2.8073 5.57077 C1.41817 5.35573 0.254603 4.49111 0.254603 2.90074 C0.254603 2.14588 0.609704 1.51197 1.13454 1.01246 C1.80007 0.391992 2.9078 0 4.08477 0 C5.16347 0 6.21313 0.324794 6.8943 0.929582 C7.4906 1.46941 7.90153 2.17052 7.91493 2.9657 L6.0434 2.9657 C6.03 2.62747 5.84463 2.2646 5.60343 2.02268 C5.27737 1.69789 4.6096 1.50973 4.07137 1.50973 C3.5041 1.50973 2.85196 1.63069 2.44103 2.03612 C2.22663 2.25116 2.09933 2.49531 2.09933 2.84474 C2.09933 3.46521 2.5259 3.78776 3.11997 3.88408 C3.7587 3.97816 4.65203 4.04536 5.30417 4.126 C6.8072 4.32983 8.07127 5.25942 8.07127 6.89234 C8.07127 7.78384 7.72957 8.41775 7.23377 8.88814"/><path transform="translate(101.355 12.033)" d="M1.85813 0 L0 0 L0 9.56461 L1.85813 9.56461 L1.85813 0 Z"/><path transform="translate(104.478 12.033)" d="M4.80837 1.61949 L4.80837 9.56461 L2.97704 9.56461 L2.97704 1.61949 L0 1.61949 L0 0 L7.78763 0 L7.78763 1.61949 L4.80837 1.61949 Z"/><path transform="translate(113.058 12.033)" d="M5.33319 5.89556 L5.33319 9.56461 L3.49069 9.56461 L3.49069 5.89556 L0 0 L1.98543 0 L4.4689 4.12824 L6.95013 0 L8.85069 0 L5.33319 5.89556 Z"/><path transform="translate(43.758 24.371)" d="M3.88377 1.52541 L1.82017 1.52541 L1.82017 4.62551 L3.88377 4.62551 C5.10764 4.62551 5.6615 4.0028 5.6615 3.08218 C5.6615 2.16156 5.1054 1.52541 3.88377 1.52541 Z M3.95523 6.1554 L1.82017 6.1554 L1.82017 9.59373 L0 9.59373 L0 0 L3.95523 0 C6.27343 0 7.5107 1.23197 7.5107 3.07322 C7.5107 4.91446 6.27343 6.15764 3.95523 6.15764"/><path transform="translate(51.695 24.191)" d="M5.7754 2.2198 C5.37786 1.81436 4.76593 1.58365 4.18303 1.58365 C3.60013 1.58365 2.9882 1.81436 2.58843 2.2198 C1.89163 2.9097 1.8626 4.10136 1.8626 4.98166 C1.8626 5.86196 1.89163 7.03794 2.58843 7.72785 C2.98597 8.13328 3.5979 8.36399 4.18303 8.36399 C4.76817 8.36399 5.37786 8.13552 5.7754 7.72785 C6.4722 7.03794 6.50123 5.86196 6.50123 4.98166 C6.50123 4.10136 6.47443 2.9097 5.7754 2.2198 Z M7.08413 8.86351 C6.31587 9.59373 5.26397 9.9454 4.18303 9.9454 C3.1021 9.9454 2.04797 9.59373 1.2797 8.86351 C0.183132 7.82193 0 6.54963 0 4.97942 C0 3.40921 0.183132 2.12348 1.2797 1.0819 C2.04797 0.351673 3.09987 0 4.18303 0 C5.2662 0 6.31587 0.351673 7.08413 1.0819 C8.1807 2.12348 8.36384 3.40921 8.36384 4.97942 C8.36384 6.54963 8.17847 7.82193 7.08413 8.86351 Z"/><path transform="translate(61.124 24.369)" d="M4.2545 1.52765 L1.8358 1.52765 L1.8358 4.39703 L4.28353 4.39703 C5.32203 4.39703 5.92057 3.88408 5.92057 2.9769 C5.92057 2.20412 5.29523 1.52765 4.25673 1.52765 M5.762 9.59373 L4.08253 5.96724 L1.8492 5.96724 L1.8492 9.59373 L0 9.59373 L0 0 L4.25227 0 C6.65757 0 7.7519 1.43357 7.7519 2.9769 C7.7519 4.2604 7.01267 5.27734 5.9027 5.66933 L7.7519 9.59373 L5.75977 9.59373 L5.762 9.59373 Z"/><path transform="translate(69.403 24.369)" d="M4.82399 1.62397 L4.82399 9.59373 L2.9882 9.59373 L2.9882 1.62397 L0 1.62397 L0 0 L7.80997 0 L7.80997 1.62397 L4.82399 1.62397 Z"/><path transform="translate(77.483 24.189)" d="M7.25387 8.92174 C6.4856 9.65197 5.30416 9.94988 4.0669 9.94988 C2.99936 9.94988 1.876 9.67885 1.0519 8.95982 C0.453365 8.44687 0 7.63377 0 6.72659 L1.87823 6.72659 C1.87823 7.20146 2.10604 7.61809 2.40307 7.9048 C2.82964 8.31023 3.51303 8.41775 4.09593 8.41775 C4.79273 8.41775 5.46273 8.28335 5.84686 7.9048 C6.07467 7.67633 6.2444 7.44337 6.2444 6.98418 C6.2444 6.28083 5.67713 5.95604 5.04956 5.84628 C4.36616 5.72533 3.48623 5.69621 2.81623 5.58869 C1.42263 5.37365 0.254596 4.50679 0.254596 2.90746 C0.254596 2.15036 0.611933 1.51421 1.13677 1.0147 C1.80453 0.391992 2.9145 0 4.09593 0 C5.17687 0 6.22877 0.324794 6.91217 0.931822 C7.50847 1.47389 7.92164 2.17724 7.93727 2.9769 L6.05903 2.9769 C6.04563 2.63867 5.86027 2.27356 5.61907 2.0294 C5.29077 1.70461 4.623 1.51421 4.08253 1.51421 C3.51303 1.51421 2.85867 1.63741 2.4455 2.04284 C2.2311 2.26012 2.1038 2.50203 2.1038 2.8537 C2.1038 3.47641 2.53037 3.8012 3.1289 3.89528 C3.76764 3.98936 4.66543 4.0588 5.3198 4.13944 C6.8273 4.34327 8.0936 5.27734 8.0936 6.91474 C8.0936 7.80848 7.7519 8.44463 7.25387 8.91726"/><path transform="translate(86.87 24.369)" d="M8.35043 9.59373 L8.35043 2.74619 L5.73297 9.45933 L4.3818 9.45933 L1.77773 2.66555 L1.77773 9.59373 L0 9.59373 L0 0 L2.47453 0 L5.12103 6.8341 L7.78317 0 L10.1282 0 L10.1282 9.59373 L8.35043 9.59373 Z"/><path transform="translate(98.065 24.192)" d="M5.7754 2.2198 C5.37786 1.81436 4.76593 1.58365 4.18303 1.58365 C3.60013 1.58365 2.9882 1.81436 2.59067 2.2198 C1.89387 2.9097 1.86483 4.10136 1.86483 4.98166 C1.86483 5.86196 1.89387 7.03794 2.59067 7.72785 C2.9882 8.13328 3.60013 8.36399 4.18303 8.36399 C4.76593 8.36399 5.37786 8.13552 5.7754 7.72785 C6.4722 7.03794 6.50123 5.86196 6.50123 4.98166 C6.50123 4.10136 6.4722 2.9097 5.7754 2.2198 Z M7.08413 8.86351 C6.31587 9.59373 5.26173 9.9454 4.1808 9.9454 C3.09987 9.9454 2.04573 9.59373 1.2797 8.86351 C0.183129 7.82193 0 6.54963 0 4.97942 C0 3.40921 0.183129 2.12348 1.2797 1.0819 C2.04796 0.351673 3.09987 0 4.1808 0 C5.26173 0 6.31363 0.351673 7.08413 1.0819 C8.17847 2.12348 8.36383 3.40921 8.36383 4.97942 C8.36383 6.54963 8.17847 7.82193 7.08413 8.86351 Z"/><path transform="translate(107.566 24.369)" d="M3.95523 9.77069 C1.3534 9.77069 0 8.20048 0 5.91348 L0 0 L1.83579 0 L1.83579 5.8866 C1.83579 7.25298 2.49016 8.18704 3.95523 8.18704 C5.4203 8.18704 6.07466 7.25298 6.07466 5.8866 L6.07466 0 L7.91046 0 L7.91046 5.91348 C7.91046 8.20048 6.5593 9.77069 3.95523 9.77069 Z"/><path transform="translate(116.457 24.369)" d="M4.82176 1.62397 L4.82176 9.59373 L2.98597 9.59373 L2.98597 1.62397 L0 1.62397 L0 0 L7.80996 0 L7.80996 1.62397 L4.82176 1.62397 Z"/><path transform="translate(125.176 24.369)" d="M5.97417 9.59373 L5.97417 5.41173 L1.83581 5.41173 L1.83581 9.59373 L0 9.59373 L0 0 L1.83581 0 L1.83581 3.74744 L5.97417 3.74744 L5.97417 0 L7.80997 0 L7.80997 9.59373 L5.97417 9.59373 Z"/><path transform="translate(122.144 14.539)" d="M4.17634 1.60157 C3.88824 1.30813 3.44604 1.14238 3.02394 1.14238 C2.60184 1.14238 2.15963 1.30813 1.87153 1.60157 C1.3668 2.10108 1.34671 2.96122 1.34671 3.59737 C1.34671 4.23352 1.3668 5.0847 1.87153 5.58197 C2.15963 5.8754 2.60184 6.04116 3.02394 6.04116 C3.44604 6.04116 3.88824 5.8754 4.17634 5.58197 C4.68107 5.08246 4.70118 4.23352 4.70118 3.59737 C4.70118 2.96122 4.68107 2.10108 4.17634 1.60157 Z M5.12327 6.40403 C4.56717 6.93266 3.80561 7.18578 3.02394 7.18578 C2.24228 7.18578 1.4807 6.93042 0.924603 6.40403 C0.13177 5.65141 0 4.73079 0 3.59737 C0 2.46395 0.134003 1.53437 0.924603 0.781744 C1.4807 0.255354 2.24228 0 3.02394 0 C3.80561 0 4.56717 0.255354 5.12327 0.781744 C5.9161 1.53437 6.04787 2.46395 6.04787 3.59737 C6.04787 4.73079 5.91387 5.65141 5.12327 6.40403 Z"/><path transform="translate(128.959 14.664)" d="M1.3266 1.14238 L1.3266 3.00154 L4.64087 3.00154 L4.64087 4.14616 L1.3266 4.14616 L1.3266 6.93266 L0 6.93266 L0 0 L5.04064 0 L5.04064 1.14238 L1.3266 1.14238 Z"/></svg></a><p class="ph-note"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"/></svg><span>Footer placeholder — not part of this test</span></p><div class="ph-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div></div></footer>
+<div class="toast" role="status" aria-live="polite"></div>
+<script>
+(function () {
+  "use strict";
+  var toastEl = document.querySelector(".toast");
+  var toastTimer;
+  function toast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("is-visible"); }, 3200);
+  }
+  window.uopToast = toast;
+
+  // Links that leave the prototype: tell the participant instead of 404ing.
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href="#"], [data-proto]');
+    if (!a) return;
+    e.preventDefault();
+    var label = (a.getAttribute("data-proto") || a.textContent || "").trim().replace(/\s+/g, " ");
+    toast("“" + label + "” isn't part of this prototype");
+  });
+
+  // Mobile menu
+  var menuBtn = document.querySelector(".menu-toggle");
+  var nav = document.getElementById("primary-nav");
+  if (menuBtn && nav) {
+    menuBtn.addEventListener("click", function () {
+      var open = nav.classList.toggle("is-open");
+      menuBtn.setAttribute("aria-expanded", String(open));
+      menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    });
+  }
+
+  // Header search sends people to the single on-page search (lo-fi rule: never a second search field)
+  document.querySelectorAll("[data-jump-search]").forEach(function (b) {
+    b.addEventListener("click", function (e) {
+      e.preventDefault();
+      var input = document.getElementById("ask-input");
+      if (!input) return;
+      input.scrollIntoView({ block: "center" });
+      input.focus({ preventScroll: true });
+    });
+  });
+
+  // Dismissible bands (Zone A)
+  document.querySelectorAll("[data-dismiss]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var band = document.getElementById(btn.getAttribute("data-dismiss"));
+      if (band) band.hidden = true;
+      var main = document.getElementById("main");
+      if (main) main.focus({ preventScroll: true });
+    });
+  });
+
+  // Video placeholders
+  document.querySelectorAll(".play").forEach(function (p) {
+    p.addEventListener("click", function () { toast("Video isn't included in this prototype"); });
+  });
+
+  // Newsletter / simple email forms
+  document.querySelectorAll("[data-email-form]").forEach(function (f) {
+    var field = f.querySelector('input[type="email"]');
+    var err = f.querySelector(".error-msg");
+    var ok = f.parentElement.querySelector(".success-msg");
+    var btn = f.querySelector("[type=submit]");
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim());
+      field.setAttribute("aria-invalid", String(!valid));
+      err.classList.toggle("is-visible", !valid);
+      if (!valid) { field.focus(); return; }
+      btn.classList.add("is-loading"); btn.setAttribute("aria-busy", "true");
+      setTimeout(function () {
+        btn.classList.remove("is-loading"); btn.removeAttribute("aria-busy");
+        f.hidden = true; ok.classList.add("is-visible"); ok.focus();
+      }, 800);
+    });
+  });
+
+  // Level filter buttons (aria-pressed toggle group)
+  document.querySelectorAll("[data-toggle-group]").forEach(function (group) {
+    group.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        group.querySelectorAll("button").forEach(function (o) { o.setAttribute("aria-pressed", "false"); });
+        b.setAttribute("aria-pressed", "true");
+        group.dispatchEvent(new CustomEvent("change", { detail: b.getAttribute("data-value") }));
+      });
+    });
+  });
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
+  }
+})();
+
+</script>
+<script>
+(function () {
+  "use strict";
+  var toast = function (m) { (window.uopToast || function () {})(m); };
+  function escapeHtml(s) { return s.replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  // Zone C · Ask
+  var form = document.getElementById("ask-form");
+  if (form) {
+    var input = document.getElementById("ask-input");
+    var submit = form.querySelector("[type=submit]");
+    var result = document.getElementById("ask-result");
+    var modes = form.querySelectorAll('input[name="ask-mode"]');
+    function setMode(mode) {
+      input.placeholder = input.getAttribute("data-ph-" + mode);
+      submit.querySelector(".label").textContent = mode === "ask" ? "Ask" : "Search";
+      form.setAttribute("data-mode", mode);
+    }
+    modes.forEach(function (r) { r.addEventListener("change", function () { setMode(r.value); }); });
+    var checked = form.querySelector('input[name="ask-mode"]:checked');
+    setMode(checked ? checked.value : "search");
+
+    form.querySelectorAll(".chip").forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        form.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+        chip.setAttribute("aria-pressed", "true");
+        input.value = chip.textContent.replace(/[“”"]/g, "").trim();
+        input.focus();
+      });
+    });
+    input.addEventListener("input", function () {
+      form.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    });
+
+    // ---- Results + sample generative answer (pattern: AIP-6 "A1c/d — Overlay results") ----
+    var out = document.getElementById("ask-out");
+    var quotaEl = form.querySelector("[data-quota]");
+    var quota = 5;
+    var REGULATED = /(fee|cost|tuition|entry req|requirement|grade|points|deadline|visa|ielts|english lang)/i;
+    var TOPICS = [
+      [/clearing|vacanc|places/i, [["Clearing: how it works", "/study/clearing"], ["Clearing vacancies", "/study/clearing/vacancies"], ["Call the Clearing team", "/contact/clearing"]]],
+      [/accommodat|halls|room|live/i, [["Accommodation", "/accommodation"], ["Halls of residence", "/accommodation/halls"], ["Applying for accommodation", "/accommodation/apply"]]],
+      [/fee|cost|scholarship|funding|money|afford/i, [["Tuition fees", "/study/fees"], ["Scholarships and bursaries", "/study/funding"], ["Cost of living in Portsmouth", "/student-life/cost-of-living"]]],
+      [/entry|grade|requirement|points|english|ielts/i, [["Entry requirements", "/study/entry-requirements"], ["English language requirements", "/international/english-language"], ["Course finder", "/courses"]]],
+      [/apply|ucas|statement|offer|deadline|five courses/i, [["How to apply", "/study/how-to-apply"], ["Writing your personal statement", "/study/personal-statement"], ["Key dates", "/study/key-dates"]]],
+      [/visa|international|january|country|scholarships/i, [["International students", "/international"], ["Student visa", "/international/visa"], ["January starts", "/international/january"]]],
+      [/where|building|food|eat|map|talk|tour|schedule|eldon/i, [["Open Day schedule", "/open-days/schedule"], ["Campus map", "/about/campus-map"], ["Food and drink on campus", "/student-life/food"]]],
+      [/placement|connected|compare|course|degree|study/i, [["Connected Degrees", "/study/connected-degrees"], ["Placements and work experience", "/careers/placements"], ["Course finder", "/courses"]]]
+    ];
+    var DEFAULT_SRC = [["Study at Portsmouth", "/study"], ["Student life", "/student-life"], ["Contact us", "/contact"]];
+    var TAGS = ["Page", "Course", "News", "Page", "Event"];
+    var EXTRA = [["Undergraduate study", "/study/undergraduate"], ["Frequently asked questions", "/help/faqs"], ["Student stories", "/student-life/stories"]];
+    function sourcesFor(q) { var s = DEFAULT_SRC; for (var i = 0; i < TOPICS.length; i++) if (TOPICS[i][0].test(q)) { s = TOPICS[i][1]; break; }
+      var out = s.slice(); EXTRA.forEach(function (x) { if (out.length < 5 && !out.some(function (o) { return o[1] === x[1]; })) out.push(x); }); return out; }
+
+    function resultsHtml(src, q) {
+      var items = src.map(function (s, i) {
+        return '<li class="sr"><span class="tag">' + TAGS[i % 5] + '</span><a class="sr__title" href="#">' + s[0] + '</a><span class="sr__url">port.ac.uk' + s[1] + '</span>' +
+          '<span class="sr__line" aria-hidden="true"></span><span class="sr__line sr__line--short" aria-hidden="true"></span></li>';
+      }).join("");
+      return '<div class="ask__results"><h3 class="ask__results-h">Results <span class="muted">for “' + escapeHtml(q) + '”</span></h3><ul class="sr-list">' + items + '</ul>' +
+        '<a class="btn btn--secondary btn--sm" href="#" data-proto="See all results">See all results</a> <span class="small muted">opens the full search page</span></div>';
+    }
+
+    function loadingHtml() {
+      return '<section class="ai ai--loading" aria-busy="true" aria-label="AI generated answer, loading">' +
+        '<p class="ai__head"><span class="ai__badge" aria-hidden="true"><svg class="icon"><use href="#i-sparkle"/></svg></span><strong>Generating an answer…</strong></p>' +
+        '<span class="ai__shim"></span><span class="ai__shim"></span><span class="ai__shim ai__shim--short"></span></section>';
+    }
+
+    function answerHtml(q, src) {
+      var reg = REGULATED.test(q);
+      var body = reg
+        ? '<p><strong>This is a sample generative answer.</strong> On the live site, a short answer to “' + escapeHtml(q) + '” would appear here. Because it\'s about fees, entry requirements or deadlines, it would point you to the official table on <a href="#src-1">' + src[0][0] + ' [1]</a> rather than summarise the figures, and link to <a href="#src-2">' + src[1][0] + ' [2]</a> for more detail.</p>'
+        : '<p><strong>This is a sample generative answer.</strong> On the live site, a short answer to “' + escapeHtml(q) + '” would appear here, written from University of Portsmouth pages such as <a href="#src-1">' + src[0][0] + ' [1]</a> and <a href="#src-2">' + src[1][0] + ' [2]</a>, so you can check each key fact against the page it came from.</p>';
+      var srcs = src.slice(0, 3).map(function (s, i) { return '<li id="src-' + (i + 1) + '"><a href="#">[' + (i + 1) + '] ' + s[0] + '</a> <span class="muted">port.ac.uk' + s[1] + '</span></li>'; }).join("");
+      return '<section class="ai" aria-labelledby="ai-h">' +
+        '<div class="ai__head"><span class="ai__badge" aria-hidden="true"><svg class="icon"><use href="#i-sparkle"/></svg></span><h3 id="ai-h">AI generated answer</h3>' +
+        '<span class="ai__sample">Sample</span><button type="button" class="btn-text ai__hide" aria-expanded="true" aria-controls="ai-body">Hide</button></div>' +
+        '<div id="ai-body" class="ai__body">' + body +
+        '<h4 class="ai__src-h">Sources</h4><ol class="ai__src">' + srcs + '</ol></div>' +
+        '<div class="ai__foot"><span>Was this helpful?</span><button type="button" class="chip ai__fb" aria-pressed="false">Yes</button><button type="button" class="chip ai__fb" aria-pressed="false">No</button>' +
+        '<button type="button" class="btn-text ai__report" data-proto="Report an inaccuracy">Report an inaccuracy</button>' +
+        '<span class="ai__check">AI generated — always check key details</span></div>' +
+        '<p class="ai__thanks small" role="status"></p></section>';
+    }
+
+    function exhaustedHtml() {
+      return '<section class="ai ai--empty" aria-label="AI answers used up"><p class="ai__head"><span class="ai__badge" aria-hidden="true"><svg class="icon"><use href="#i-sparkle"/></svg></span><strong>You\'ve used today\'s AI answers</strong></p>' +
+        '<p>Search results are still available below, and you can keep searching as much as you like. <a href="#" data-proto="Log in for more AI answers">Log in for more AI answers</a>.</p></section>';
+    }
+
+    function wireAnswer() {
+      var hide = out.querySelector(".ai__hide");
+      if (hide) hide.addEventListener("click", function () {
+        var body = document.getElementById("ai-body"), open = hide.getAttribute("aria-expanded") === "true";
+        body.hidden = open; hide.setAttribute("aria-expanded", String(!open)); hide.textContent = open ? "Show" : "Hide";
+      });
+      out.querySelectorAll(".ai__fb").forEach(function (b) {
+        b.addEventListener("click", function () {
+          out.querySelectorAll(".ai__fb").forEach(function (o) { o.setAttribute("aria-pressed", "false"); });
+          b.setAttribute("aria-pressed", "true");
+          out.querySelector(".ai__thanks").textContent = "Thanks — your feedback helps us improve these answers.";
+        });
+      });
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var q = input.value.trim();
+      if (!q) { input.focus(); toast("Type a question or search term first"); return; }
+      var mode = form.getAttribute("data-mode"), src = sourcesFor(q);
+      submit.classList.add("is-loading"); submit.setAttribute("aria-busy", "true");
+      if (mode === "ask" && quota > 0) {
+        out.innerHTML = loadingHtml();
+        setTimeout(function () {
+          quota -= 1; quotaEl.textContent = quota;
+          out.innerHTML = answerHtml(q, src) + resultsHtml(src, q);
+          submit.classList.remove("is-loading"); submit.removeAttribute("aria-busy");
+          wireAnswer();
+        }, 1600);
+      } else {
+        setTimeout(function () {
+          var lead = mode === "ask"
+            ? exhaustedHtml()
+            : '<p class="ai__nudge"><svg class="icon" aria-hidden="true"><use href="#i-sparkle"/></svg> Want an AI summary? <button type="button" class="btn-text" data-ask-instead>Switch to AI</button></p>';
+          out.innerHTML = lead + resultsHtml(src, q);
+          submit.classList.remove("is-loading"); submit.removeAttribute("aria-busy");
+          var ai = out.querySelector("[data-ask-instead]");
+          if (ai) ai.addEventListener("click", function () { document.getElementById("mode-ask").checked = true; setMode("ask"); form.requestSubmit(); });
+        }, 500);
+      }
+    });
+  }
+
+
+})();
+
+</script>
+<script>
+(function(){
+  var mq = window.matchMedia('(max-width: 60rem)');
+  function sync(){ document.querySelectorAll('.ft-col').forEach(function(d){ if(mq.matches){ d.removeAttribute('open'); } else { d.setAttribute('open',''); } }); }
+  document.querySelectorAll('.ft-col summary').forEach(function(s){ s.addEventListener('click', function(e){ if(!mq.matches) e.preventDefault(); }); });
+  sync(); mq.addEventListener('change', sync);
+})();
+</script>
+<script>
+(function(){
+  var data=[["09:30", "Welcome talk", "Main talks", "Guildhall", "Main hall", "all"], ["10:00", "Psychology subject talk", "Subject talks", "King Henry Building", "Room 1.04", "Psychology"], ["10:00", "Campus tour", "Tours", "Guildhall Square", "Meet at the welcome tent", "all"], ["10:30", "Accommodation tour", "Tours", "Rees Hall", "Reception", "all"], ["11:00", "Computing subject talk", "Subject talks", "Future Technology Centre", "Lecture theatre", "Computing"], ["11:00", "Student finance talk", "Main talks", "Eldon Building", "Room 2.12", "all"], ["11:30", "Business subject talk", "Subject talks", "Richmond Building", "Room 0.10", "Business"], ["12:00", "Nursing and health subject talk", "Subject talks", "James Watson Building", "Simulation suite", "Nursing"], ["13:00", "Accommodation tour", "Tours", "Rees Hall", "Reception", "all"], ["13:30", "Criminology subject talk", "Subject talks", "St George's Building", "Room 1.01", "Criminology"], ["14:00", "Psychology lab tour", "Tours", "King Henry Building", "Ground floor", "Psychology"], ["14:30", "Applying to university talk", "Main talks", "Guildhall", "Main hall", "all"], ["15:00", "Computing labs open session", "Subject talks", "Future Technology Centre", "Labs 2 and 3", "Computing"]];
+  var list=document.getElementById('sched'), cnt=document.getElementById('sched-count');
+  var fT=document.getElementById('f-time'), fB=document.getElementById('f-building'), fS=document.getElementById('f-subject');
+  function mins(t){var p=t.split(':');return +p[0]*60+ +p[1];}
+  // PROTO: "now" is pinned to 10:40 so every session sees the same state. Override with ?now=14:00
+  var q=(location.search.match(/now=(\d{1,2}):?(\d{2})/)||[]), now=q.length?(+q[1]*60+ +q[2]):640;
+  var cur=null,nxt=null; data.forEach(function(r){var m=mins(r[0]); if(m<=now&&now<m+45) cur=r; if(m>now&&!nxt) nxt=r;});
+  if(cur){document.getElementById('now-t').textContent=cur[1]; document.getElementById('now-p').textContent=cur[3]+', '+cur[4];}
+  if(nxt){document.getElementById('next-t').textContent=nxt[0]+' '+nxt[1]; document.getElementById('next-p').textContent=nxt[3];}
+  function render(){
+    var rows=data.filter(function(r){
+      var m=mins(r[0]);
+      if(fT.value==='now'&&m+45<now) return false;
+      if(fT.value==='am'&&m>=720) return false;
+      if(fT.value==='pm'&&m<720) return false;
+      if(fB.value&&r[3]!==fB.value) return false;
+      if(fS.value&&r[2]!==fS.value) return false;
+      return true;});
+    list.innerHTML=rows.map(function(r){var past=mins(r[0])+45<now;
+      return '<li class="event" style="grid-template-columns:4.5rem 1fr auto'+(past?';opacity:.6':'')+'"><p class="event__date" style="background:var(--uop-color-tint-teal)"><b style="font-size:1.25rem">'+r[0]+'</b><span>'+(past?'Finished':r[2].replace(' talks','').replace('Main','Talk'))+'</span></p><div><h3>'+r[1]+'</h3><p class="event__meta"><span>'+r[3]+'</span><span>'+r[4]+'</span></p></div><a class="btn-text" href="#map-h">Map<span class="visually-hidden"> for '+r[1]+'</span></a></li>';}).join('')
+      || '<li class="muted">Nothing matches. Try a different time or building, or <button class="btn-text" type="button" id="clear-f">clear the filters</button>.</li>';
+    cnt.textContent='Showing '+rows.length+' of '+data.length;
+    var c=document.getElementById('clear-f'); c&&c.addEventListener('click',function(){fT.value='';fB.value='';fS.value='';render();fT.focus();});
+  }
+  [fT,fB,fS].forEach(function(s){s.addEventListener('change',render);}); render();
+})();
+</script>
+</body>
+</html>
