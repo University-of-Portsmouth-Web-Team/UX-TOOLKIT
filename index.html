@@ -361,6 +361,14 @@ footer p { margin: 0; max-width: var(--measure); }
   html { scroll-behavior: smooth; }
 }
 </style>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zcjijuxicg");
+</script>
 </head>
 <body>
 <a class="skip" href="#directory">Skip to the directory</a>
@@ -421,39 +429,15 @@ footer p { margin: 0; max-width: var(--measure); }
 
   /* -------------------------------------------------------------------
      SETTINGS
-     The page asks GitHub for the repository's file list, so new HTML files
-     appear automatically after they're pushed. If GitHub can't be reached
-     (offline venue, private repo, rate limit) it uses FALLBACK_FILES below.
-     Add new paths to FALLBACK_FILES too if the toolkit is used offline.
+     The directory is built from the live file list on GitHub, so pages
+     appear and disappear here as they're added to or removed from the repo.
+     The last list fetched is kept in the browser and reused if GitHub
+     can't be reached (for example, a shared network hitting GitHub's limit
+     of 60 requests an hour).
      ------------------------------------------------------------------- */
   var REPO = "University-of-Portsmouth-Web-Team/UX-TOOLKIT";
   var BRANCH = "main";
-
-  var FALLBACK_FILES = [
-    "WHEEL.html",
-    "OD/2026/24OCT/LOGIN.html",
-    "OD/2026/15NOV/HOMEPAGE/uop-home-v1-core.html",
-    "OD/2026/15NOV/HOMEPAGE/uop-home-v2-clearing.html",
-    "OD/2026/15NOV/HOMEPAGE/uop-home-v3-international.html",
-    "OD/2026/15NOV/HOMEPAGE/uop-home-v4-ucas-deadline.html",
-    "OD/2026/15NOV/HOMEPAGE/uop-home-v5-open-day.html",
-    "OD/2026/15NOV/HEADER/uop-menu-v1-mega.html",
-    "OD/2026/15NOV/HEADER/uop-menu-v2-column-cards.html",
-    "OD/2026/15NOV/HEADER/uop-menu-v3-audience.html",
-    "OD/2026/15NOV/HEADER/uop-menu-v4-search-overlay.html",
-    "OD/2026/15NOV/HEADER/uop-menu-v5-drawer.html",
-    "OD/2026/15NOV/FOOTER/uop-footer-v1-figma.html",
-    "OD/2026/15NOV/FOOTER/uop-footer-v2-cta.html",
-    "OD/2026/15NOV/FOOTER/uop-footer-v3-campuses.html",
-    "OD/2026/15NOV/FOOTER/uop-footer-v4-newsletter.html",
-    "OD/2026/15NOV/FOOTER/uop-footer-v5-compact.html",
-    "OD/2026/15NOV/UG/uop-course-ug-apply-a-route-finder-paginated.html",
-    "OD/2026/15NOV/UG/uop-course-ug-apply-b-timeline.html",
-    "OD/2026/15NOV/UG/uop-course-ug-apply-c-table-checklist-paginated.html",
-    "OD/2026/15NOV/PGT/uop-course-pgt-apply-a-route-finder.html",
-    "OD/2026/15NOV/PGT/uop-course-pgt-apply-b-timeline-paginated.html",
-    "OD/2026/15NOV/PGT/uop-course-pgt-apply-c-table-checklist.html"
-  ];
+  var REFRESH_AFTER = 10 * 60 * 1000; // reuse a list fetched in the last 10 minutes
 
   /* Research activities, keyed by top-level folder name. Unknown folders
      still appear, titled from the folder name. */
@@ -780,25 +764,56 @@ footer p { margin: 0; max-width: var(--measure); }
 
   /* ---------- Load ---------- */
   var status = document.getElementById("board-status");
-  var CACHE_KEY = "uxtoolkit-tree-v1";
+  var CACHE_KEY = "uxtoolkit-tree-v2";
 
-  function useFallback(reason) {
-    render(buildModel(FALLBACK_FILES));
-    status.textContent = reason;
+  function readCache() {
+    try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); } catch (e) { return null; }
+  }
+  function writeCache(paths) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), paths: paths })); } catch (e) {}
+  }
+  function savedAt(ms) {
+    var d = new Date(ms);
+    return d.toLocaleString("en-GB", { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
   }
 
-  function load() {
-    var cached = null;
-    try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "null"); } catch (e) {}
-    if (cached && cached.paths && Date.now() - cached.at < 10 * 60 * 1000) {
-      render(buildModel(cached.paths));
-      status.textContent = "Up to date with the repository.";
+  function showError() {
+    var board = document.getElementById("board-list");
+    board.textContent = "";
+    board.removeAttribute("aria-busy");
+    document.getElementById("board-total").textContent = "";
+    document.getElementById("loading").hidden = true;
+    status.textContent = "The directory couldn’t load.";
+
+    var retry = el("button", { type: "button", className: "link-btn", text: "Try again" });
+    retry.addEventListener("click", function () {
+      root.textContent = "";
+      document.getElementById("loading").hidden = false;
+      status.textContent = "Loading the directory…";
+      fetchTree();
+    });
+    var root = document.getElementById("areas");
+    root.textContent = "";
+    root.appendChild(el("div", { className: "wrap" }, [
+      el("div", { className: "empty", role: "alert" }, [
+        el("p", { text: "The list of prototypes and tools couldn’t be loaded from GitHub. Check your connection and try again, or browse the files on GitHub directly." }),
+        retry,
+        el("p", { style: "margin:var(--uop-space-m) 0 0" }, [
+          el("a", { href: "https://github.com/" + REPO, text: "Browse the files on GitHub" })
+        ])
+      ])
+    ]));
+  }
+
+  function fetchTree() {
+    var cached = readCache();
+    if (!window.fetch) {
+      if (cached && cached.paths) { render(buildModel(cached.paths)); status.textContent = "Showing the list saved on " + savedAt(cached.at) + "."; }
+      else showError();
       return;
     }
-    if (!window.fetch) { useFallback("Showing the saved list of files."); return; }
-
     var controller = window.AbortController ? new AbortController() : null;
-    var timer = setTimeout(function () { if (controller) controller.abort(); }, 6000);
+    var timer = setTimeout(function () { if (controller) controller.abort(); }, 8000);
 
     fetch("https://api.github.com/repos/" + REPO + "/git/trees/" + BRANCH + "?recursive=1", {
       headers: { "Accept": "application/vnd.github+json" },
@@ -809,14 +824,28 @@ footer p { margin: 0; max-width: var(--measure); }
     }).then(function (data) {
       clearTimeout(timer);
       var paths = (data.tree || []).filter(function (n) { return n.type === "blob"; }).map(function (n) { return n.path; });
-      if (!paths.some(function (p) { return /\.html?$/i.test(p) && !/^index\.html?$/i.test(p); })) throw new Error("empty");
-      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), paths: paths })); } catch (e) {}
+      writeCache(paths);
       render(buildModel(paths));
       status.textContent = "Up to date with the repository.";
     }).catch(function () {
       clearTimeout(timer);
-      useFallback("Couldn’t reach GitHub, so this is the saved list of files. Anything added recently may be missing.");
+      if (cached && cached.paths) {
+        render(buildModel(cached.paths));
+        status.textContent = "Couldn’t reach GitHub, so this is the list saved on " + savedAt(cached.at) + ". Recent changes may be missing.";
+      } else {
+        showError();
+      }
     });
+  }
+
+  function load() {
+    var cached = readCache();
+    if (cached && cached.paths && Date.now() - cached.at < REFRESH_AFTER) {
+      render(buildModel(cached.paths));
+      status.textContent = "Up to date with the repository.";
+      return;
+    }
+    fetchTree();
   }
 
   load();
