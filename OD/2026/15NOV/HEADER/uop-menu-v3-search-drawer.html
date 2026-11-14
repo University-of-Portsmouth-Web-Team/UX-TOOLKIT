@@ -651,6 +651,12 @@ a:visited { color: var(--uop-color-link-visited); }
 .fcard--navy .fcard__date, .fcard--purple .fcard__date { background: rgba(255,255,255,.16); }
 .fcard--teal .fcard__date, .fcard--blue .fcard__date, .fcard--yellow .fcard__date { background: rgba(255,255,255,.45); }
 .fcard:hover .fcard__cta { text-decoration: underline; text-underline-offset: .2em; }
+/* Inside .on-dark areas the generic "links are white" rule (0,2,1) beat these; restate with higher specificity */
+.on-dark .fcard--purple a.fcard__cta, .on-dark .fcard--navy a.fcard__cta,
+.on-dark .fcard--purple a.fcard__cta:visited, .on-dark .fcard--navy a.fcard__cta:visited { color: var(--uop-color-text-primary); }
+.on-dark .fcard--teal a.fcard__cta, .on-dark .fcard--blue a.fcard__cta, .on-dark .fcard--yellow a.fcard__cta,
+.on-dark .fcard--teal a.fcard__cta:visited, .on-dark .fcard--blue a.fcard__cta:visited, .on-dark .fcard--yellow a.fcard__cta:visited { color: var(--uop-color-text-inverse); }
+.on-dark .fcard--teal, .on-dark .fcard--blue, .on-dark .fcard--yellow { color: var(--uop-color-text-primary); }
 .fcard--compact { min-height: 12rem; }
 .fcard--compact .fcard__title { font-size: 1.25rem; }
 
@@ -799,7 +805,10 @@ a:visited { color: var(--uop-color-link-visited); }
 .overlay .hbtn--login { color: var(--uop-color-text-inverse) !important; }
 .overlay .hbtn--login:hover { background: rgba(255,255,255,.14); }
 .overlay .logo-svg { color: var(--uop-color-text-inverse); }
+.ov__mobile-extras { display: none; }
 @media (max-width: 56rem) {
+  .ov__mobile-extras { display: block; margin-top: var(--uop-space-xl); }
+  .overlay.is-drilled .ov__left { display: none; }
   .ov__panes { display: none; }
   .overlay.is-drilled .ov__secs { display: none; }
   .overlay.is-drilled .ov__panes { display: block; }
@@ -1003,6 +1012,28 @@ dialog.lb::backdrop { background: rgba(30,27,75,.6); }
 }
 @media (prefers-reduced-motion: reduce) { .ft-col summary .icon { transition: none; } }
 
+.sites-list { margin-block: var(--uop-space-l) var(--uop-space-xl); }
+.sites-list__h { display: flex; gap: var(--uop-space-s); align-items: center; font-weight: 700; font-size: .875rem; margin-bottom: var(--uop-space-s); }
+.sites-list ul { list-style: none; display: grid; gap: var(--uop-space-2xs); }
+.sites-list a { display: grid; padding: var(--uop-space-s) var(--uop-space-m); border-radius: var(--uop-radius-m); border: 1px solid var(--uop-color-border-strong); color: var(--uop-color-text-primary); text-decoration: none; }
+.sites-list a span { font-size: .8125rem; color: var(--uop-color-text-secondary); }
+.sites-list a:hover { background: var(--uop-color-tint-purple); }
+.sites-list a[aria-current="true"] { border-color: var(--uop-color-pink); box-shadow: inset 4px 0 0 var(--uop-color-pink); }
+.sites-list a[aria-current="true"] strong::after { content: " (current)"; font-weight: 600; font-size: .8125rem; }
+.on-dark .sites-list a, .overlay .sites-list a { color: var(--uop-color-text-inverse); border-color: rgba(255,255,255,.4); }
+.on-dark .sites-list a span, .overlay .sites-list a span { color: var(--uop-color-text-inverse); opacity: .85; }
+.overlay .sites-list a:hover { background: rgba(255,255,255,.12); }
+.dr__cta { width: 100%; margin-bottom: var(--uop-space-l); }
+.dr__group .fcard { margin-top: var(--uop-space-m); }
+
+/* Mobile menus (drop-down list style, design 2): popovers open inline instead of floating off-screen */
+@media (max-width: 68rem) {
+  .navwrap .pop { position: static; width: 100%; min-width: 0; margin-top: var(--uop-space-s); box-shadow: none; }
+  .navwrap .pop-wrap { width: 100%; }
+  .navwrap .pop-wrap > .hbtn { width: 100%; justify-content: flex-start; border: 1px solid var(--uop-color-border-strong); border-radius: var(--uop-radius-m); }
+  /* show the same cards as desktop */
+  .v3 .mega .desk-only { display: block !important; margin-top: var(--uop-space-s); }
+}
 .v4-search { cursor: pointer; font: inherit; color: var(--uop-color-text-secondary); text-align: left; }
 .v4-search { min-width: 0; }
 .v4-search__ph { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1091,7 +1122,8 @@ dialog.lb::backdrop { background: rgba(30,27,75,.6); }
     </div>
   </div>
   <div class="container ov__body">
-    <ul class="ov__secs"><li><button type="button" class="ov__sec" aria-pressed="true" aria-controls="ov-study" data-sec>Study<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-research" data-sec>Research<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-international" data-sec>International<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-student-life" data-sec>Student life<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-news-and-events" data-sec>News and events<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-about" data-sec>About<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li></ul>
+    <div class="ov__left"><ul class="ov__secs"><li><button type="button" class="ov__sec" aria-pressed="true" aria-controls="ov-study" data-sec>Study<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-research" data-sec>Research<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-international" data-sec>International<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-student-life" data-sec>Student life<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-news-and-events" data-sec>News and events<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li><li><button type="button" class="ov__sec" aria-pressed="false" aria-controls="ov-about" data-sec>About<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button></li></ul>
+      <div class="ov__mobile-extras"><nav class="sites-list" aria-label="Choose a site"><p class="sites-list__h"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-globe"/></svg> Choose a site</p><ul><li><a href="#" aria-current="true"><strong>University of Portsmouth</strong><span>www.port.ac.uk</span></a></li><li><a href="#"><strong>University of Portsmouth London</strong><span>london.port.ac.uk</span></a></li><li><a href="#"><strong>UoP Sport</strong><span>Sport</span></a></li><li><a href="#"><strong>University Library</strong><span>Library</span></a></li></ul></nav><a class="btn btn--white" href="#">Book an Open Day</a></div></div>
     <div class="ov__panes"><div id="ov-study" class="ov__pane">
   <button type="button" class="ov__back" data-ov-back><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron-left"/></svg> Back to menu</button>
   <h2 class="ov__pane-h">Study</h2>
