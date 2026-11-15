@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Welcome – UX Toolkit – University of Portsmouth</title>
+<meta name="description" content="Welcome screen for the UX research stand: an instant £15 voucher for 10 minutes of your time.">
+<meta name="theme-color" content="#1E1B4B">
+<!-- Lets the page run full screen when added to the iPad home screen -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Welcome">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+/* Tokens from design.md v0.2.0, as used on the UX Toolkit homepage */
+:root {
+  color-scheme: dark;
+  --uop-navy-500: #1E1B4B;
+  --uop-navy-400: #565478;
+  --uop-navy-300: #83829C;
+  --uop-navy-100: #DDDDE4;
+  --uop-pink-500: #FF0F7B;
+  --uop-pink-pale-500: #FFC6E7;
+
+  --uop-space-s: 0.5rem;
+  --uop-space-m: 0.75rem;
+  --uop-space-l: 1rem;
+  --uop-space-xl: 1.5rem;
+  --uop-space-2xl: 2rem;
+  --uop-radius-xl: 1rem;
+  --uop-radius-pill: 999px;
+
+  --font: "Encode Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: inherit; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--uop-navy-500);
+  color: #FFFFFF;
+  font-family: var(--font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  /* Kiosk niceties: no text selection, callouts or double-tap zoom */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.stage {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+}
+
+/* ---------- The offer: the only thing on the screen ---------- */
+.offer { margin: 0; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.25em 0.8em 0.3em 0.6em;
+  border-radius: var(--uop-radius-pill);
+  background: var(--uop-pink-pale-500);
+  color: var(--uop-navy-500);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: clamp(2.25rem, 5vw, 4.25rem);
+  line-height: 1.1;
+}
+.pill svg { width: 0.95em; height: 0.95em; }
+.amount {
+  display: block;
+  margin-top: var(--uop-space-2xl);
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: clamp(5rem, 12.5vw, 11rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+/* A short pink bar under the offer, the one brand accent */
+.amount::after {
+  content: "";
+  display: block;
+  width: 1.4em;
+  height: 0.08em;
+  margin: 0.22em auto 0;
+  border-radius: var(--uop-radius-pill);
+  background: var(--uop-pink-500);
+}
+.amount-label {
+  display: block;
+  margin-top: var(--uop-space-xl);
+  font-stretch: 112%;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  line-height: 1.15;
+  color: var(--uop-navy-100);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .amount { animation: arrive 900ms cubic-bezier(.2, .8, .2, 1) both; }
+  @keyframes arrive { from { opacity: 0; transform: translateY(0.12em); } }
+}
+
+.small-print {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(1.25rem, 4vh, 2.5rem));
+  margin: 0;
+  text-align: center;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  color: var(--uop-navy-100);
+}
+</style>
+
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zcjijuxicg");
+</script>
+</head>
+<body>
+<main class="stage">
+  <p class="offer">
+    <span class="pill">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>
+      </svg>
+      Instant
+    </span>
+    <span class="amount">£15 voucher</span>
+    <span class="amount-label">for 10 minutes of your time</span>
+  </p>
+  <p class="small-print">Open to anyone aged 16 or over. Terms apply.</p>
+</main>
+
+<script>
+/* Ask the iPad to keep the screen on while this page is showing.
+   Safari 16.4+ supports this; some versions need a tap first, so we
+   also retry on the first touch and whenever the page becomes visible. */
+(function () {
+  if (!('wakeLock' in navigator)) return;
+  var lock = null;
+  function request() {
+    if (lock || document.visibilityState !== 'visible') return;
+    navigator.wakeLock.request('screen').then(function (l) {
+      lock = l;
+      lock.addEventListener('release', function () { lock = null; });
+    }).catch(function () {});
+  }
+  request();
+  document.addEventListener('visibilitychange', request);
+  document.addEventListener('pointerdown', request, { passive: true });
+})();
+</script>
+</body>
+</html>
