@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Back soon – UX Toolkit – University of Portsmouth</title>
+<meta name="description" content="Holding screen shown while the UX team is mid-session with a visitor.">
+<meta name="theme-color" content="#1E1B4B">
+<!-- Lets the page run full screen when added to the iPad home screen -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Back soon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+/* Tokens from design.md v0.2.0, as used on the UX Toolkit homepage */
+:root {
+  color-scheme: dark;
+  --uop-navy-500: #1E1B4B;
+  --uop-navy-400: #565478;
+  --uop-navy-300: #83829C;
+  --uop-navy-100: #DDDDE4;
+  --uop-pink-500: #FF0F7B;
+  --uop-pink-pale-500: #FFC6E7;
+
+  --uop-space-s: 0.5rem;
+  --uop-space-m: 0.75rem;
+  --uop-space-l: 1rem;
+  --uop-space-xl: 1.5rem;
+  --uop-space-2xl: 2rem;
+  --uop-space-3xl: 2.5rem;
+  --uop-space-4xl: 3rem;
+  --uop-radius-l: 0.75rem;
+  --uop-radius-xl: 1rem;
+  --uop-radius-pill: 999px;
+
+  --font: "Encode Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: inherit; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--uop-navy-500);
+  color: #FFFFFF;
+  font-family: var(--font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  /* Kiosk niceties: no text selection, callouts or double-tap zoom */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+.stage {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 5vw, 4rem);
+}
+
+/* ---------- Message ---------- */
+.message { width: 100%; max-width: 52rem; }
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--uop-space-s);
+  padding: var(--uop-space-s) var(--uop-space-l);
+  border-radius: var(--uop-radius-pill);
+  background: var(--uop-navy-400);
+  color: var(--uop-navy-100);
+  font-size: clamp(0.95rem, 1.5vw, 1.125rem);
+  font-weight: 500;
+  margin: 0 0 var(--uop-space-xl);
+}
+.status .dot {
+  width: 0.7rem; height: 0.7rem; border-radius: 50%;
+  background: var(--uop-pink-500);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .status .dot { animation: none; } }
+
+h1 {
+  margin: 0;
+  font-stretch: 125%;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 6.4vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+.lede {
+  margin: var(--uop-space-l) 0 0;
+  font-size: clamp(1.15rem, 2.1vw, 1.5rem);
+  line-height: 1.45;
+  color: var(--uop-navy-100);
+  max-width: 40ch;
+}
+
+/* Two choices side by side */
+.choices {
+  margin-top: clamp(1.75rem, 4vh, 3rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: var(--uop-space-l);
+}
+.choice {
+  border-radius: var(--uop-radius-xl);
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+.choice.take { background: var(--uop-pink-pale-500); color: var(--uop-navy-500); }
+.choice.wait { border: 2px solid var(--uop-navy-300); }
+.choice svg { width: 2.5rem; height: 2.5rem; display: block; margin-bottom: var(--uop-space-m); }
+.choice h2 {
+  margin: 0;
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  line-height: 1.15;
+}
+.choice p {
+  margin: var(--uop-space-s) 0 0;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.45;
+}
+.choice.wait p { color: var(--uop-navy-100); }
+
+.thanks {
+  margin: clamp(1.25rem, 3vh, 2rem) 0 0;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  color: var(--uop-navy-100);
+}
+
+/* Narrow screens: stack the choices */
+@media (max-width: 640px) {
+  .choices { grid-template-columns: 1fr; }
+}
+</style>
+
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zcjijuxicg");
+</script>
+</head>
+<body>
+<main class="stage">
+  <div class="message">
+    <p class="status"><span class="dot" aria-hidden="true"></span>We’re with a visitor right now</p>
+    <h1>We’ll be back in a few minutes</h1>
+    <p class="lede">We’re hearing what someone thinks of our new website designs. Thanks for your patience, we’d love to hear from you too.</p>
+
+    <div class="choices">
+      <section class="choice take">
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true">
+          <rect x="4" y="4" width="13" height="13" rx="2"/><rect x="23" y="4" width="13" height="13" rx="2"/><rect x="4" y="23" width="13" height="13" rx="2"/>
+          <rect x="9" y="9" width="3" height="3" fill="currentColor" stroke="none"/><rect x="28" y="9" width="3" height="3" fill="currentColor" stroke="none"/><rect x="9" y="28" width="3" height="3" fill="currentColor" stroke="none"/>
+          <path d="M23 23h5v5M36 23v13h-8M23 31v5"/>
+        </svg>
+        <h2>Take a leaflet with you</h2>
+        <p>Scan the QR code on one of our small leaflets and give your feedback online whenever suits you.</p>
+      </section>
+
+      <section class="choice wait">
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+          <circle cx="20" cy="20" r="16"/><path d="M20 11v9l6 4"/>
+        </svg>
+        <h2>Or wait here a moment</h2>
+        <p>Stay for a few minutes and we’ll be right with you.</p>
+      </section>
+    </div>
+
+    <p class="thanks">University of Portsmouth UX team</p>
+  </div>
+</main>
+
+<script>
+/* Ask the iPad to keep the screen on while this page is showing.
+   Safari 16.4+ supports this; some versions need a tap first, so we
+   also retry on the first touch and whenever the page becomes visible. */
+(function () {
+  if (!('wakeLock' in navigator)) return;
+  var lock = null;
+  function request() {
+    if (lock || document.visibilityState !== 'visible') return;
+    navigator.wakeLock.request('screen').then(function (l) {
+      lock = l;
+      lock.addEventListener('release', function () { lock = null; });
+    }).catch(function () {});
+  }
+  request();
+  document.addEventListener('visibilitychange', request);
+  document.addEventListener('pointerdown', request, { passive: true });
+})();
+</script>
+</body>
+</html>
